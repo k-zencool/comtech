@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  # 1. ส่วน Web Server (PHP + Apache)
+  web:
+    build: .
+    container_name: comtech_web
+    ports:
+      - "7000:80" # <--- แก้ตรงนี้: พอร์ตเครื่องเรา 7000 : พอร์ตใน Docker 80
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+
+  # 2. ส่วน Database (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: comtech_db
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: comtech_db
+    volumes:
+      - db_data:/var/lib/mysql
+
+  # 3. ส่วนจัดการ Database (phpMyAdmin)
+  pma:
+    image: phpmyadmin/phpmyadmin
+    container_name: comtech_pma
+    links:
+      - db
+    ports:
+      - "7070:80" # <--- แก้ตรงนี้: พอร์ตเครื่องเรา 7070 : พอร์ตใน Docker 80
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+
+volumes:
+  db_data:

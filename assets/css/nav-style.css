@@ -1,0 +1,182 @@
+/* ============================================================
+   NAVBAR STYLE - COMTECH DEPARTMENT
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;700&family=Prompt:wght@300;400;600&display=swap");
+
+:root {
+  --bg-white: #ffffff;
+  --bg-light: #f8f9fa;
+  --text-dark: #333333;
+  --text-gray: #666666;
+  --official-pink: #c2185b;
+  --official-black: #1a1a1a;
+  --font-head: "Prompt", sans-serif;
+  --font-body: "Sarabun", sans-serif;
+}
+
+/* Base Body */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background-color: var(--bg-light);
+  color: var(--text-dark);
+}
+
+/* Navbar Container */
+.navbar {
+  background-color: var(--bg-white);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border-top: 5px solid var(--official-pink);
+  height: 80px;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logo Section */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  text-decoration: none;
+  color: var(--official-black);
+}
+
+.logo-img {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img img {
+  height: 55px; /* ปรับตามความเหมาะสม */
+  width: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover .logo-img img {
+  transform: scale(1.05);
+}
+
+.logo-text h1 {
+  font-family: var(--font-head);
+  font-size: 20px;
+  margin: 0;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--official-black);
+}
+
+.logo-text span {
+  font-size: 13px;
+  color: var(--text-gray);
+  font-weight: 400;
+  display: block;
+}
+
+/* Nav Links */
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links li a {
+  color: var(--text-dark);
+  text-decoration: none;
+  font-family: var(--font-head);
+  font-weight: 500;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-links li a i {
+  font-size: 14px;
+  color: #9ca3af;
+  transition: 0.3s;
+}
+
+.nav-links li a:hover {
+  color: var(--official-pink);
+}
+
+.nav-links li a:hover i {
+  color: var(--official-pink);
+  transform: translateY(-2px);
+}
+
+.nav-links li a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 3px;
+  bottom: -10px;
+  left: 0;
+  background-color: var(--official-pink);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.nav-links li a:hover::after {
+  width: 100%;
+}
+
+/* Social Menu (FB Button) */
+.fb-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #fff;
+  color: var(--official-pink);
+  padding: 8px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-family: var(--font-head);
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  border: 1px solid var(--official-pink);
+}
+
+.fb-btn:hover {
+  background-color: var(--official-pink);
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(194, 24, 91, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Mobile Responsive */
+@media (max-width: 900px) {
+  .nav-links, .fb-label {
+    display: none;
+  }
+
+  .logo-img img {
+    height: 45px;
+  }
+
+  .fb-btn {
+    padding: 10px;
+    border-radius: 50%;
+  }
+}
