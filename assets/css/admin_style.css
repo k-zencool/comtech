@@ -1,11 +1,12 @@
-/* assets/css/admin_style.css */
+/* --- Root Variables --- */
 :root {
-    --primary-color: #c2185b; /* ชมพู UTC สำหรับจุดเน้น */
+    --primary-color: #c2185b; /* ชมพู UTC */
     --dark-main: #1a1a1a;
-    --light-bg: #fdfdfd;
+    --light-bg: #f8f9fa;
     --card-white: #ffffff;
     --text-dark: #2d3436;
     --text-muted: #95a5a6;
+    --border-color: #eee;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -16,17 +17,17 @@ body {
     margin: 0;
 }
 
-/* --- Layout --- */
+/* --- Layout Structure --- */
 .admin-wrapper {
     display: flex;
     min-height: 100vh;
 }
 
-/* --- Sidebar Style (ขาว-ดำ) --- */
+/* --- Sidebar Style --- */
 .sidebar {
     width: 280px;
     background: var(--card-white);
-    border-right: 1px solid #eee;
+    border-right: 1px solid var(--border-color);
     position: fixed;
     height: 100vh;
     z-index: 1000;
@@ -45,9 +46,7 @@ body {
     margin: 0;
 }
 
-.sidebar-menu li {
-    margin-bottom: 10px;
-}
+.sidebar-menu li { margin-bottom: 10px; }
 
 .sidebar-menu li a {
     padding: 14px 20px;
@@ -60,7 +59,6 @@ body {
     transition: var(--transition);
 }
 
-/* Hover: พื้นหลังดำ ตัวหนังสือขาว */
 .sidebar-menu li a:hover {
     background: var(--dark-main);
     color: #fff !important;
@@ -77,79 +75,133 @@ body {
     flex: 1;
     margin-left: 280px;
     padding: 40px;
+    width: calc(100% - 280px);
 }
 
-/* --- Card & Stats (ขาวคลีน) --- */
-.welcome-box {
+/* --- Cards & Components --- */
+.card-custom {
     background: var(--card-white);
-    padding: 30px;
+    border: none;
     border-radius: 20px;
-    border: 1px solid #eee;
-    margin-bottom: 40px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition);
 }
 
 .stat-card {
     background: var(--card-white);
-    border: 1px solid #eee;
+    border: 1px solid var(--border-color);
     border-radius: 20px;
     padding: 25px;
     transition: var(--transition);
     cursor: pointer;
 }
 
-/* Card Hover: เปลี่ยนเป็นสีดำ */
 .stat-card:hover {
     background: var(--dark-main);
-    border-color: var(--dark-main);
     transform: translateY(-8px);
     box-shadow: 0 15px 30px rgba(0,0,0,0.2);
 }
 
-.stat-card:hover h2, 
-.stat-card:hover h6 {
-    color: #fff !important;
+.stat-card:hover h2, .stat-card:hover h6 { color: #fff !important; }
+
+/* --- 🔥 แก้บัค Select หมวดหมู่ (Dropdown Black Bug) --- */
+.form-select.rounded-12 {
+    border-radius: 12px !important;
+    padding: 12px 15px !important;
+    border: 1px solid #dee2e6 !important;
+    background-color: #fff !important;
+    color: var(--text-dark) !important;
+    box-shadow: none !important;
 }
 
-.stat-card:hover .icon-box {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
+.form-select.rounded-12:focus {
+    border-color: var(--dark-main) !important;
 }
 
-.icon-box {
-    width: 55px;
-    height: 55px;
-    background: #f8f9fa;
-    color: var(--primary-color);
+.form-select.rounded-12 option {
+    background: #fff !important;
+    color: #333 !important;
+    padding: 10px;
+}
+
+/* --- 🖼 ระบบ Preview รูปภาพ --- */
+.preview-container {
+    width: 100%;
+    height: 280px;
+    border: 2px dashed #ddd;
     border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.4rem;
-    margin-bottom: 15px;
-    transition: var(--transition);
+    overflow: hidden;
+    background: #fafafa;
+    position: relative;
+}
+
+.preview-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.preview-box-sm {
+    width: 80px;
+    height: 50px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #eee;
+    overflow: hidden;
+}
+
+/* --- ✍️ CKEditor Customization --- */
+.ck-editor {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.ck-editor__editable {
+    flex-grow: 1;
+    min-height: 450px !important;
+    border-radius: 0 0 15px 15px !important;
+}
+
+/* --- ⚖️ Layout Helpers --- */
+.equal-height-row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.equal-height-row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
 }
 
 /* --- Buttons --- */
-.btn-primary {
-    background: var(--dark-main);
-    border: none;
-    border-radius: 10px;
-    padding: 12px 25px;
-    color: #fff;
-    transition: var(--transition);
+.btn-primary, .btn-dark {
+    background: var(--dark-main) !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 12px 25px !important;
+    transition: var(--transition) !important;
 }
 
-.btn-primary:hover {
-    background: var(--primary-color);
-    transform: scale(1.05);
+.btn-primary:hover, .btn-dark:hover {
+    background: var(--primary-color) !important;
+    transform: translateY(-2px);
 }
 
-.btn-logout:hover {
-    background: #ff4757 !important;
-}
+.rounded-15 { border-radius: 15px !important; }
+.rounded-12 { border-radius: 12px !important; }
 
 /* Responsive */
 @media (max-width: 992px) {
-    .sidebar { margin-left: -280px; }
-    .main-content { margin-left: 0; padding: 20px; }
+    .sidebar { transform: translateX(-100%); }
+    .main-content { margin-left: 0; padding: 20px; width: 100%; }
 }
