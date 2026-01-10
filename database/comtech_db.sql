@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db:3306
--- Generation Time: Jan 08, 2026 at 08:23 AM
+-- Generation Time: Jan 10, 2026 at 09:46 AM
 -- Server version: 8.0.44
 -- PHP Version: 8.3.26
 
@@ -32,15 +32,17 @@ CREATE TABLE `admins` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `fullname` varchar(100) DEFAULT NULL,
-  `last_login` timestamp NULL DEFAULT NULL
+  `role` enum('superadmin','admin') NOT NULL DEFAULT 'admin',
+  `last_login` timestamp NULL DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `admins`
 --
 
-INSERT INTO `admins` (`id`, `username`, `password`, `fullname`, `last_login`) VALUES
-(1, 'admin', '$2y$10$tM2A/G5D7G9Gv0P1HjP.P.7Ff/rM7Y6C5G3X/N4A/B2S1G0G7K8K.', 'Super Admin', '2026-01-08 08:01:53');
+INSERT INTO `admins` (`id`, `username`, `password`, `fullname`, `role`, `last_login`, `created_at`) VALUES
+(1, 'admin', '$2y$10$tM2A/G5D7G9Gv0P1HjP.P.7Ff/rM7Y6C5G3X/N4A/B2S1G0G7K8K.', 'Super Admin', 'superadmin', '2026-01-10 08:49:20', '2026-01-10 08:29:41');
 
 -- --------------------------------------------------------
 
@@ -50,13 +52,29 @@ INSERT INTO `admins` (`id`, `username`, `password`, `fullname`, `last_login`) VA
 
 CREATE TABLE `news` (
   `id` int NOT NULL,
-  `topic` varchar(255) NOT NULL,
-  `content` text NOT NULL,
-  `thumbnail` varchar(255) DEFAULT 'default_news.jpg',
-  `category` enum('ทั่วไป','กิจกรรม','รับสมัคร') DEFAULT 'ทั่วไป',
-  `view_count` int DEFAULT '0',
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `topic` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `content` text COLLATE utf8mb4_general_ci NOT NULL,
+  `category` varchar(100) COLLATE utf8mb4_general_ci DEFAULT 'ประชาสัมพันธ์',
+  `image` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `projects`
+--
+
+CREATE TABLE `projects` (
+  `id` int NOT NULL,
+  `project_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'ชื่อโครงงาน',
+  `student_names` text COLLATE utf8mb4_unicode_ci COMMENT 'ชื่อผู้จัดทำ (เช่น นาย ก, นาย ข)',
+  `advisor` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'อาจารย์ที่ปรึกษา',
+  `academic_year` varchar(4) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'ปีการศึกษา (2568)',
+  `description` text COLLATE utf8mb4_unicode_ci COMMENT 'รายละเอียดโครงงาน',
+  `image` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'รูปพรีวิวผลงาน',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -82,12 +100,12 @@ CREATE TABLE `student_projects` (
 
 CREATE TABLE `teachers` (
   `id` int NOT NULL,
-  `fullname` varchar(255) NOT NULL,
-  `position` varchar(255) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `phone` varchar(20) DEFAULT NULL,
-  `profile_img` varchar(255) DEFAULT 'default_teacher.jpg',
-  `sort_order` int DEFAULT '0'
+  `name` varchar(255) NOT NULL,
+  `position` varchar(100) DEFAULT NULL,
+  `education` text,
+  `expertise` text,
+  `image` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -105,6 +123,12 @@ ALTER TABLE `admins`
 -- Indexes for table `news`
 --
 ALTER TABLE `news`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `projects`
+--
+ALTER TABLE `projects`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -127,13 +151,19 @@ ALTER TABLE `teachers`
 -- AUTO_INCREMENT for table `admins`
 --
 ALTER TABLE `admins`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `news`
 --
 ALTER TABLE `news`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `projects`
+--
+ALTER TABLE `projects`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `student_projects`
@@ -145,7 +175,7 @@ ALTER TABLE `student_projects`
 -- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

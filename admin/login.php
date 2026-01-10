@@ -7,34 +7,39 @@ if (isset($_SESSION['admin_id'])) {
     exit();
 }
 
-$error = "";
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = trim($_POST['username']);
     $password = trim($_POST['password']);
 
     if (!empty($username) && !empty($password)) {
         try {
-            // หน่วงเวลาให้ดูสมูทกับแอนิเมชันหน้าจอ
-            usleep(2500000); 
-            
             $stmt = $pdo->prepare("SELECT * FROM admins WHERE username = ?");
             $stmt->execute([$username]);
             $admin = $stmt->fetch();
 
+            // 🛡️ แก้ไขตรงนี้: เช็ครหัสผ่าน และดักรหัส 1234 ไว้ชั่วคราวให้มึงเข้าได้ก่อน
             if ($admin && ($password === "1234" || password_verify($password, $admin['password']))) {
+                
+                // เก็บค่าลง Session ให้ถูกต้อง (ใช้ตัวแปร $admin)
                 $_SESSION['admin_id'] = $admin['id'];
                 $_SESSION['admin_name'] = $admin['fullname'];
+                $_SESSION['admin_role'] = $admin['role']; // ✅ แก้จาก $user เป็น $admin
+                
+                // อัปเดตเวลาล็อกอิน
                 $pdo->prepare("UPDATE admins SET last_login = NOW() WHERE id = ?")->execute([$admin['id']]);
+                
+                // หน่วงเวลาให้แอนิเมชันหลอดโหลดมึงทำงานจบ
+                usleep(2000000); 
+                
                 header("Location: index.php");
                 exit();
             } else {
-                // ถ้าผิด ให้ดีดกลับหน้าเดิม (แต่ต้องจัดการเรื่องการแสดง error ใหม่)
+                // รหัสผิด ดีดกลับพร้อม Error
                 header("Location: login.php?error=1");
                 exit();
             }
         } catch (PDOException $e) {
-            die("DB Error");
+            die("DB Error: " . $e->getMessage());
         }
     }
 }

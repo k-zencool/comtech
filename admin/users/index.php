@@ -2,31 +2,32 @@
 session_start();
 require_once __DIR__ . '/../../config/db.php';
 
-// 1. เช็คสิทธิ์: ถ้าไม่ได้ login ให้ดีดกลับ
+// 1. เช็คสิทธิ์พื้นฐาน
 if (!isset($_SESSION['admin_id'])) {
     header("Location: ../login.php");
     exit();
 }
 
-// 2. ดึงข้อมูล Admin ทั้งหมด
+// 🛡️ ดักบั๊ก Undefined: ถ้าไม่มีค่า ให้ตั้งเป็นว่างไว้ก่อน
+$my_role = $_SESSION['admin_role'] ?? '';
+
 try {
-    $stmt = $pdo->query("SELECT id, username, fullname, last_login FROM admins ORDER BY id ASC");
+    $stmt = $pdo->query("SELECT id, username, fullname, role, last_login FROM admins ORDER BY id ASC");
     $adminList = $stmt->fetchAll();
 } catch (PDOException $e) {
     $adminList = [];
-    $error_msg = "Error: " . $e->getMessage();
 }
 ?>
 <!DOCTYPE html>
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>จัดการผู้ดูแลระบบ | ComTech Admin</title>
+    <title>จัดการแอดมิน | ComTech Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../assets/css/admin_style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -36,85 +37,79 @@ try {
         <div class="main-content">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h3 class="fw-bold m-0">จัดการผู้ดูแลระบบ</h3>
-                    <p class="text-muted small m-0">รายชื่อผู้ที่มีสิทธิ์เข้าถึงระบบหลังบ้าน</p>
+                    <h3 class="fw-bold m-0"><i class="fa-solid fa-user-shield me-2 text-primary"></i>จัดการแอดมิน</h3>
+                    <p class="text-muted small m-0">จัดการสิทธิ์เฉพาะผู้ดูแลระบบเท่านั้น</p>
                 </div>
-                <a href="add.php" class="btn btn-primary shadow-sm">
-                    <i class="fa-solid fa-user-plus me-2"></i> เพิ่มแอดมินใหม่
-                </a>
+                <?php if ($my_role === 'superadmin'): ?>
+                    <a href="add.php" class="btn btn-dark rounded-pill px-4 shadow-sm">
+                        <i class="fa-solid fa-user-plus me-2"></i> เพิ่มแอดมินใหม่
+                    </a>
+                <?php endif; ?>
             </div>
 
-            <div class="card border-0 shadow-sm" style="border-radius: 20px; overflow: hidden;">
+            <div class="card border-0 shadow-sm rounded-20 overflow-hidden card-table">
                 <div class="card-body p-0">
                     <div class="table-responsive">
                         <table class="table table-hover align-middle m-0">
-                            <thead class="bg-light">
+                            <thead>
                                 <tr>
                                     <th class="ps-4 py-3" width="80">ID</th>
                                     <th class="py-3">ชื่อ-นามสกุล</th>
-                                    <th class="py-3">Username</th>
-                                    <th class="py-3">เข้าใช้งานล่าสุด</th>
-                                    <th class="pe-4 py-3 text-center" width="150">จัดการ</th>
+                                    <th class="py-3">ระดับสิทธิ์</th>
+                                    <th class="pe-4 py-3 text-center" width="180">การจัดการ</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php if (!empty($adminList)): ?>
-                                    <?php foreach ($adminList as $user): ?>
-                                    <tr>
-                                        <td class="ps-4 text-muted">#<?= $user['id'] ?></td>
-                                        <td>
-                                            <div class="fw-bold text-dark">
-                                                <i class="fa-solid fa-circle-user me-2 text-primary"></i>
-                                                <?= htmlspecialchars($user['fullname']) ?>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <code class="bg-light px-2 py-1 rounded text-danger"><?= htmlspecialchars($user['username']) ?></code>
-                                        </td>
-                                        <td>
-                                            <small class="text-muted">
-                                                <i class="fa-regular fa-clock me-1"></i>
-                                                <?= $user['last_login'] ? date('d/m/Y H:i', strtotime($user['last_login'])) : 'ยังไม่เคยเข้าใช้งาน' ?>
-                                            </small>
-                                        </td>
-                                        <td class="pe-4 text-center">
-                                            <div class="btn-group gap-2">
-                                                <a href="edit.php?id=<?= $user['id'] ?>" class="btn btn-sm btn-outline-dark rounded-pill px-3">
-                                                    <i class="fa-solid fa-user-pen"></i>
-                                                </a>
-                                                <?php if ($user['id'] != $_SESSION['admin_id']): ?>
-                                                    <a href="delete.php?id=<?= $user['id'] ?>" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('ลบแอดมินคนนี้เหรอ? คิดดีๆ นะเพื่อน')">
-                                                        <i class="fa-solid fa-user-minus"></i>
-                                                    </a>
-                                                <?php else: ?>
-                                                    <button class="btn btn-sm btn-light rounded-pill px-3" disabled title="ลบตัวเองไม่ได้นะไอ้ชาย">
-                                                        <i class="fa-solid fa-ban"></i>
-                                                    </button>
-                                                <?php endif; ?>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
-                                <?php else: ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center py-5 text-muted">ไม่พบข้อมูลผู้ดูแลระบบ</td>
-                                    </tr>
-                                <?php endif; ?>
+                                <?php foreach ($adminList as $user): ?>
+                                <tr>
+                                    <td class="ps-4 text-muted small">#<?= $user['id'] ?></td>
+                                    <td><div class="fw-bold text-dark"><?= htmlspecialchars($user['fullname']) ?></div></td>
+                                    <td>
+                                        <?php if ($user['role'] == 'superadmin'): ?>
+                                            <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-3 py-2 rounded-pill">
+                                                <i class="fa-solid fa-crown me-1"></i> Super Admin
+                                            </span>
+                                        <?php else: ?>
+                                            <span class="badge bg-light text-muted border px-3 py-2 rounded-pill">
+                                                <i class="fa-solid fa-user me-1"></i> Admin
+                                            </span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="pe-4 text-center">
+                                        <div class="btn-group gap-2">
+                                            <?php if ($my_role === 'superadmin' || $user['id'] == $_SESSION['admin_id']): ?>
+                                                <a href="edit.php?id=<?= $user['id'] ?>" class="btn btn-sm btn-outline-dark rounded-pill px-3"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <?php endif; ?>
+
+                                            <?php if ($my_role === 'superadmin' && $user['id'] != $_SESSION['admin_id'] && $user['role'] !== 'superadmin'): ?>
+                                                <button type="button" onclick="confirmDelete(<?= $user['id'] ?>)" class="btn btn-sm btn-outline-danger rounded-pill px-3"><i class="fa-solid fa-trash-can"></i></button>
+                                            <?php else: ?>
+                                                <button class="btn btn-sm btn-light rounded-pill px-3 border" disabled title="ไม่มีสิทธิ์ลบไอดีนี้"><i class="fa-solid fa-lock text-muted"></i></button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            
-            <div class="mt-4 p-3 bg-light rounded-20 border border-dashed">
-                <small class="text-muted">
-                    <i class="fa-solid fa-circle-info me-2"></i> 
-                    **คำเตือน:** การลบผู้ดูแลระบบจะทำให้บุคคลนั้นไม่สามารถเข้าถึงส่วนจัดการนี้ได้อีก โปรดตรวจสอบให้แน่ใจก่อนดำเนินการ
-                </small>
-            </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'ยืนยันการลบ?',
+                text: "ลบแล้วกู้คืนไม่ได้นะเพื่อน!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#1a1a1a',
+                confirmButtonText: 'ลบเลย!',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => { if (result.isConfirmed) { window.location.href = 'delete.php?id=' + id; } })
+        }
+    </script>
 </body>
 </html>

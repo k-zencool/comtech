@@ -2,12 +2,14 @@
 :root {
     --primary-color: #c2185b; /* ชมพู UTC */
     --dark-main: #1a1a1a;
-    --light-bg: #f8f9fa;
+    --light-bg: #f4f6f9; /* ปรับพื้นหลังให้ออกเทานิดๆ เพื่อให้ Card ขาวดูเด่นขึ้น */
     --card-white: #ffffff;
     --text-dark: #2d3436;
     --text-muted: #95a5a6;
     --border-color: #eee;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --shadow-sm: 0 5px 15px rgba(0,0,0,0.03);
+    --shadow-md: 0 10px 30px rgba(0,0,0,0.08);
 }
 
 body {
@@ -15,6 +17,7 @@ body {
     background-color: var(--light-bg);
     color: var(--text-dark);
     margin: 0;
+    overflow-x: hidden;
 }
 
 /* --- Layout Structure --- */
@@ -32,6 +35,7 @@ body {
     height: 100vh;
     z-index: 1000;
     transition: var(--transition);
+    box-shadow: 10px 0 30px rgba(0,0,0,0.01);
 }
 
 .sidebar-header {
@@ -46,7 +50,7 @@ body {
     margin: 0;
 }
 
-.sidebar-menu li { margin-bottom: 10px; }
+.sidebar-menu li { margin-bottom: 8px; }
 
 .sidebar-menu li a {
     padding: 14px 20px;
@@ -59,15 +63,23 @@ body {
     transition: var(--transition);
 }
 
+.sidebar-menu li a i {
+    width: 25px;
+    margin-right: 12px;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
 .sidebar-menu li a:hover {
-    background: var(--dark-main);
-    color: #fff !important;
+    background: #f8f9fa;
+    color: var(--primary-color) !important;
     transform: translateX(5px);
 }
 
 .sidebar-menu li.active a {
     background: var(--primary-color);
-    color: #fff;
+    color: #fff !important;
+    box-shadow: 0 8px 20px rgba(194, 24, 91, 0.25);
 }
 
 /* --- Main Content --- */
@@ -76,69 +88,86 @@ body {
     margin-left: 280px;
     padding: 40px;
     width: calc(100% - 280px);
-}
-
-/* --- Cards & Components --- */
-.card-custom {
-    background: var(--card-white);
-    border: none;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
     transition: var(--transition);
 }
 
+/* --- Dashboard Specific (Stat Cards) --- */
 .stat-card {
     background: var(--card-white);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    padding: 25px;
+    border: none;
+    border-radius: 24px;
+    padding: 30px;
     transition: var(--transition);
-    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    box-shadow: var(--shadow-sm);
 }
 
 .stat-card:hover {
-    background: var(--dark-main);
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-md);
 }
 
-.stat-card:hover h2, .stat-card:hover h6 { color: #fff !important; }
-
-/* --- 🔥 แก้บัค Select หมวดหมู่ (Dropdown Black Bug) --- */
-.form-select.rounded-12 {
-    border-radius: 12px !important;
-    padding: 12px 15px !important;
-    border: 1px solid #dee2e6 !important;
-    background-color: #fff !important;
-    color: var(--text-dark) !important;
-    box-shadow: none !important;
+.icon-box {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    transition: var(--transition);
 }
 
-.form-select.rounded-12:focus {
-    border-color: var(--dark-main) !important;
+.stat-card:hover .icon-box {
+    transform: scale(1.1) rotate(5deg);
 }
 
-.form-select.rounded-12 option {
-    background: #fff !important;
-    color: #333 !important;
-    padding: 10px;
+/* --- Tables & Cards --- */
+.card-custom, .card-table {
+    background: var(--card-white);
+    border: none;
+    border-radius: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
 }
 
-/* --- 🖼 ระบบ Preview รูปภาพ --- */
+.table thead th {
+    background: #fafafa;
+    border-bottom: 1px solid var(--border-color);
+    padding: 18px 20px;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+}
+
+.table tbody td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+/* --- 🔥 Common Components (Add/Edit Screens) --- */
 .preview-container {
     width: 100%;
-    height: 280px;
+    height: 250px;
     border: 2px dashed #ddd;
-    border-radius: 15px;
+    border-radius: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     background: #fafafa;
     position: relative;
+    transition: var(--transition);
+}
+
+.preview-container:hover {
+    border-color: var(--primary-color);
+    background: #fff;
 }
 
 .preview-container img {
@@ -147,61 +176,156 @@ body {
     object-fit: cover;
 }
 
-.preview-box-sm {
-    width: 80px;
-    height: 50px;
-    background: #f8f9fa;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px dashed #eee;
-    overflow: hidden;
+/* --- Quick Action Buttons --- */
+.btn-add-quick {
+    border: 2px dashed #ddd;
+    background: #fff;
+    color: var(--text-muted);
+    padding: 15px;
+    border-radius: 20px;
+    transition: var(--transition);
+    text-decoration: none;
 }
 
-/* --- ✍️ CKEditor Customization --- */
-.ck-editor {
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
+.btn-add-quick:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: rgba(194, 24, 91, 0.02);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-sm);
 }
 
-.ck-editor__editable {
-    flex-grow: 1;
-    min-height: 450px !important;
-    border-radius: 0 0 15px 15px !important;
-}
+/* --- Utilities --- */
+.rounded-12 { border-radius: 12px !important; }
+.rounded-15 { border-radius: 15px !important; }
+.rounded-20 { border-radius: 20px !important; }
 
-/* --- ⚖️ Layout Helpers --- */
-.equal-height-row {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.equal-height-row > [class*='col-'] {
-    display: flex;
-    flex-direction: column;
-}
-
-/* --- Buttons --- */
-.btn-primary, .btn-dark {
+.btn-dark {
     background: var(--dark-main) !important;
-    border: none !important;
+    color: #fff !important;
     border-radius: 12px !important;
     padding: 12px 25px !important;
+    font-weight: 500;
     transition: var(--transition) !important;
 }
 
-.btn-primary:hover, .btn-dark:hover {
+.btn-dark:hover {
     background: var(--primary-color) !important;
     transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-.rounded-15 { border-radius: 15px !important; }
-.rounded-12 { border-radius: 12px !important; }
+/* --- Scrollbar --- */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #999; }
 
 /* Responsive */
 @media (max-width: 992px) {
     .sidebar { transform: translateX(-100%); }
     .main-content { margin-left: 0; padding: 20px; width: 100%; }
 }
+
+/* --- 🛠 ระบบดึงก้นให้เท่ากันเป๊ะ (News Equal Height) --- */
+        .equal-height-row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .equal-height-row > [class*='col-'] {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* สั่งให้ Card ยืดตามความสูงของ Row */
+        .card-custom {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+            background: #fff;
+        }
+
+        /* ฝั่งซ้าย: จัดการพื้นที่ CKEditor */
+        .card-custom .mb-0.d-flex.flex-column {
+            flex: 1;
+        }
+
+        .ck-editor {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .ck-editor__editable {
+            flex: 1 !important; /* ยืดช่องพิมพ์จนสุด Card */
+            min-height: 450px !important;
+            border-radius: 0 0 15px 15px !important;
+        }
+
+        /* ฝั่งขวา: ดันปุ่มลงล่างสุดของ Card */
+        .sticky-side {
+            position: sticky;
+            top: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* จัดระเบียบเนื้อหาภายใน Card ขวาให้แยกก้อนบนกับล่าง */
+        .sticky-side .card-custom {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* ตัวแปรสำคัญที่ทำให้ก้นเท่ากัน */
+        }
+
+        /* --- ส่วนประกอบอื่นๆ --- */
+        .preview-container {
+            width: 100%;
+            height: 250px; /* ปรับให้พอดีกับระนาบสายตา */
+            border: 2px dashed #ddd;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #fafafa;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .preview-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            display: none;
+        }
+
+        .placeholder-icon {
+            position: absolute;
+            color: #ccc;
+            z-index: 0;
+        }
+
+        .btn-remove-preview {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
