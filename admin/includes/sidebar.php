@@ -1,14 +1,19 @@
 <?php
-// 🛠️ หาชื่อไฟล์และโฟลเดอร์ปัจจุบันเพื่อทำเมนู Active
+// 🛠️ 1. หาชื่อไฟล์และโฟลเดอร์ปัจจุบันเพื่อทำเมนู Active
 $current_page = basename($_SERVER['PHP_SELF']);
 $directory    = basename(dirname($_SERVER['PHP_SELF']));
 
-// 🛠️ กำหนด Path ให้ถูกต้อง (รองรับทั้งไฟล์ในรูท admin และโฟลเดอร์ย่อย)
+// 🛠️ 2. กำหนด Path ให้ถูกต้อง (รองรับทั้งไฟล์ในรูท admin และโฟลเดอร์ย่อย)
 $base_path  = ($directory == 'admin') ? '' : '../';
 $asset_path = ($directory == 'admin') ? '../' : '../../';
+
+// 🛠️ 3. จัดการ Path สำหรับ Favicon
+$fav_path = ($directory == 'admin') ? '../' : '../../';
 ?>
 
-<!-- Mobile Header -->
+<link rel="icon" type="image/png" href="<?= $fav_path ?>assets/images/logo.png">
+<link rel="apple-touch-icon" href="<?= $fav_path ?>assets/images/logo.png">
+
 <div class="mobile-header d-lg-none">
   <div class="d-flex justify-content-between align-items-center px-3 py-2 bg-white shadow-sm border-bottom">
     <div class="d-flex align-items-center">
@@ -22,10 +27,8 @@ $asset_path = ($directory == 'admin') ? '../' : '../../';
   </div>
 </div>
 
-<!-- Overlay -->
 <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
 
-<!-- Sidebar -->
 <div class="sidebar" id="mainSidebar">
   <div class="sidebar-header">
     <div class="text-center w-100 position-relative">
@@ -88,6 +91,9 @@ $asset_path = ($directory == 'admin') ? '../' : '../../';
 </div>
 
 <script>
+/**
+ * 🛠️ Sidebar Logic & Viewport Management
+ */
 (function () {
   const init = () => {
     const toggleBtn = document.getElementById('sidebarToggle');
@@ -98,10 +104,7 @@ $asset_path = ($directory == 'admin') ? '../' : '../../';
     const mq = window.matchMedia('(min-width: 992px)');
 
     const setOpen = (open) => {
-      // sidebar
       sidebar.classList.toggle('show', open);
-
-      // overlay + icon + lock scroll เฉพาะ mobile
       const isDesktop = mq.matches;
       overlay.classList.toggle('show', open && !isDesktop);
       toggleBtn.classList.toggle('active', open && !isDesktop);
@@ -110,11 +113,10 @@ $asset_path = ($directory == 'admin') ? '../' : '../../';
 
     const toggleMenu = (e) => {
       if (e) e.preventDefault();
-      if (mq.matches) return; // desktop: sidebar ติดอยู่แล้ว ไม่ต้อง toggle
+      if (mq.matches) return; 
       setOpen(!sidebar.classList.contains('show'));
     };
 
-    // close on overlay
     const closeMenu = (e) => {
       if (e) e.preventDefault();
       if (mq.matches) return;
@@ -124,10 +126,9 @@ $asset_path = ($directory == 'admin') ? '../' : '../../';
     toggleBtn.addEventListener('click', toggleMenu);
     overlay.addEventListener('click', closeMenu);
 
-    // ป้องกันค้างตอน resize/rotate
     const sync = () => {
-      if (mq.matches) setOpen(true);   // desktop: เปิดค้าง
-      else setOpen(false);             // mobile: ปิดเริ่มต้น
+      if (mq.matches) setOpen(true);   
+      else setOpen(false);             
     };
 
     sync();
@@ -135,21 +136,9 @@ $asset_path = ($directory == 'admin') ? '../' : '../../';
     else mq.addListener(sync);
 
     window.addEventListener('orientationchange', sync);
-
-    // เผื่อบางหน้า reload พร้อม state ค้างจาก back/forward cache
     window.addEventListener('pageshow', sync);
   };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
-</script>
-
-<script>
-(function () {
   const ensureViewport = () => {
     let meta = document.querySelector('meta[name="viewport"]');
     if (!meta) {
@@ -158,16 +147,14 @@ $asset_path = ($directory == 'admin') ? '../' : '../../';
       meta.content = 'width=device-width, initial-scale=1, viewport-fit=cover';
       document.head.appendChild(meta);
     } else {
-      meta.setAttribute(
-        'content',
-        'width=device-width, initial-scale=1, viewport-fit=cover'
-      );
+      meta.setAttribute('content', 'width=device-width, initial-scale=1, viewport-fit=cover');
     }
   };
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', ensureViewport);
+    document.addEventListener('DOMContentLoaded', () => { init(); ensureViewport(); });
   } else {
+    init();
     ensureViewport();
   }
 })();
