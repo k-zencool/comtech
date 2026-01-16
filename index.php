@@ -1,164 +1,94 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ComTech Uttaradit | แผนกวิชาช่างเทคโนโลยีคอมพิวเตอร์</title>
+<?php
+// includes/navbar.php — Capsule Floating Navbar (Formal)
+if (!function_exists('h')) {
+  function h($s){ return htmlspecialchars((string)($s ?? ''), ENT_QUOTES, 'UTF-8'); }
+}
+$current = basename(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? 'index.php');
+function active($target, $current){ return $current === $target ? 'is-active' : ''; }
+?>
+<div class="nav-shell">
+  <nav class="nav-pill" id="navPill" aria-label="Main navigation">
+    <a class="pill-brand" href="index.php" aria-label="Home">
+      <span class="pill-logo">
+        <img src="assets/images/logo.png" alt="COMTECH Logo" />
+      </span>
+      <span class="pill-brand-text">
+        <span class="pill-title">COMTECH</span>
+        <span class="pill-sub">Computer Technology Department</span>
+      </span>
+    </a>
 
-    <link rel="icon" type="image/png" href="assets/images/logo.png">
+    <button class="pill-toggle" type="button" id="pillToggle" aria-expanded="false" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
 
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&family=Sarabun:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <div class="pill-menu" id="pillMenu">
+      <ul class="pill-links">
+        <li><a class="<?= active('index.php',$current) ?>" href="index.php">หน้าแรก</a></li>
+        <li><a href="#news">ข่าวสาร</a></li>
+        <li><a href="#projects">ผลงาน</a></li>
+        <li><a href="#teachers">อาจารย์</a></li>
+        <li><a href="#curriculum">หลักสูตร</a></li>
+      </ul>
 
-    <link rel="stylesheet" href="assets/css/nav-style.css">
-    <link rel="stylesheet" href="assets/css/style.css">
-</head>
-<body>
+      <div class="pill-actions">
+        <a class="pill-btn pill-btn--ghost" href="tel:0000000000" title="โทร">
+          <i class="fa-solid fa-phone"></i>
+        </a>
+        <a class="pill-btn pill-btn--primary" href="#" target="_blank" rel="noopener">
+          <i class="fa-brands fa-facebook-f"></i>
+          <span>Facebook</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+</div>
 
-    <?php include "includes/navbar.php"; ?>
+<script>
+(function(){
+  const btn = document.getElementById('pillToggle');
+  const menu = document.getElementById('pillMenu');
 
-    <header class="hero">
-        <div class="hero-overlay">
-            <div class="container hero-content">
-                <span class="badge">UTTARADIT TECHNICAL COLLEGE</span>
-                <h1>COMPUTER <br><span>TECHNOLOGY</span></h1>
-                <p>มุ่งเน้นทักษะ สร้างสรรค์นวัตกรรม ก้าวทันเทคโนโลยีระดับมืออาชีพ พร้อมสร้างบุคลากรคุณภาพสู่สังคมดิจิทัล</p>
-                <div class="hero-btns">
-                    <a href="#projects" class="btn-primary">ดูผลงานนักศึกษา</a>
-                    <a href="#news" class="btn-secondary">ข่าวสารล่าสุด</a>
-                </div>
-            </div>
-        </div>
-    </header>
+  const open = () => {
+    menu.classList.add('is-open');
+    btn.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+    document.documentElement.classList.add('nav-lock');
+  };
+  const close = () => {
+    menu.classList.remove('is-open');
+    btn.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+    document.documentElement.classList.remove('nav-lock');
+  };
 
-    <section class="news-section container" id="news">
-        <div class="section-header">
-            <h2 class="section-title">ข่าวประชาสัมพันธ์</h2>
-            <a href="all-news.php" class="view-all">ดูทั้งหมด <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
+  btn.addEventListener('click', () => {
+    menu.classList.contains('is-open') ? close() : open();
+  });
 
-        <div class="news-grid">
-            <article class="news-card">
-                <div class="news-img"><img src="assets/images/news-sample.jpg" alt="News"></div>
-                <div class="news-body">
-                    <span class="news-date"><i class="fa-regular fa-calendar"></i> 06 ม.ค. 2569</span>
-                    <h3>เปิดรับสมัครนักศึกษาใหม่ ประจำปีการศึกษา 2569</h3>
-                    <p>โอกาสมาถึงแล้ว! แผนกวิชาช่างเทคโนโลยีคอมพิวเตอร์ เปิดรับสมัครผู้สนใจเข้าศึกษาต่อทั้งระดับ ปวช. และ ปวส.</p>
-                    <a href="#" class="read-more">อ่านต่อ <i class="fa-solid fa-chevron-right"></i></a>
-                </div>
-            </article>
-            <article class="news-card">
-                <div class="news-img"><img src="assets/images/news-sample.jpg" alt="News"></div>
-                <div class="news-body">
-                    <span class="news-date"><i class="fa-regular fa-calendar"></i> 05 ม.ค. 2569</span>
-                    <h3>อบรมเชิงปฏิบัติการ "IoT For Smart Life"</h3>
-                    <p>พัฒนานักประดิษฐ์ยุคใหม่ด้วยการเขียนโปรแกรมควบคุมอุปกรณ์ผ่านสมาร์ทโฟน</p>
-                    <a href="#" class="read-more">อ่านต่อ <i class="fa-solid fa-chevron-right"></i></a>
-                </div>
-            </article>
-            <article class="news-card">
-                <div class="news-img"><img src="assets/images/news-sample.jpg" alt="News"></div>
-                <div class="news-body">
-                    <span class="news-date"><i class="fa-regular fa-calendar"></i> 04 ม.ค. 2569</span>
-                    <h3>กิจกรรมค่ายคอมพิวเตอร์จิตอาสา</h3>
-                    <p>นักศึกษาแผนกคอมฯ ร่วมใจลงพื้นที่ซ่อมบำรุงคอมพิวเตอร์ให้โรงเรียนในชนบท</p>
-                    <a href="#" class="read-more">อ่านต่อ <i class="fa-solid fa-chevron-right"></i></a>
-                </div>
-            </article>
-        </div>
-    </section>
+  // close on click link (mobile)
+  menu.querySelectorAll('a').forEach(a=>{
+    a.addEventListener('click', ()=>{
+      if (window.matchMedia('(max-width: 980px)').matches) close();
+    });
+  });
 
-    <section class="teachers-section" id="teachers">
-        <div class="container">
-            <div class="section-header center">
-                <h2 class="section-title">คณาจารย์ผู้เชี่ยวชาญ</h2>
-                <p>ทีมผู้สอนที่พร้อมถ่ายทอดประสบการณ์และดูแลนักศึกษาอย่างใกล้ชิด</p>
-            </div>
-            <div class="teacher-grid">
-                <div class="teacher-card">
-                    <div class="teacher-img"><img src="assets/images/teacher1.jpg" alt="Teacher"></div>
-                    <div class="teacher-info">
-                        <h4>ชื่อ-นามสกุล</h4>
-                        <span>หัวหน้าแผนกวิชา</span>
-                        <div class="teacher-contact">
-                            <a href="#"><i class="fa-solid fa-envelope"></i></a>
-                            <a href="#"><i class="fa-solid fa-phone"></i></a>
-                        </div>
-                    </div>
-                </div>
-                </div>
-        </div>
-    </section>
+  // esc close
+  document.addEventListener('keydown', (e)=>{
+    if (e.key === 'Escape') close();
+  });
 
-    <section class="projects-section" id="projects">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title text-white">ผลงานนักศึกษา</h2>
-                <div class="slider-controls">
-                    <button id="prevBtn"><i class="fa-solid fa-chevron-left"></i></button>
-                    <button id="nextBtn"><i class="fa-solid fa-chevron-right"></i></button>
-                </div>
-            </div>
-            
-            <div class="project-slider-wrapper">
-                <div class="project-slider">
-                    <div class="project-item">
-                        <div class="project-card">
-                            <img src="assets/images/project1.jpg" alt="Project">
-                            <div class="project-overlay">
-                                <h3>ระบบสมาร์ทฟาร์ม IoT</h3>
-                                <p>คว้ารางวัลชนะเลิศสิ่งประดิษฐ์คนรุ่นใหม่</p>
-                                <a href="#" class="view-btn">ดูรายละเอียด</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-item">
-                        <div class="project-card">
-                            <img src="assets/images/project2.jpg" alt="Project">
-                            <div class="project-overlay">
-                                <h3>แอปฯ บริการชุมชน</h3>
-                                <p>โปรเจกต์พัฒนาระบบคิวออนไลน์</p>
-                                <a href="#" class="view-btn">ดูรายละเอียด</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-item">
-                        <div class="project-card">
-                            <img src="assets/images/project3.jpg" alt="Project">
-                            <div class="project-overlay">
-                                <h3>เกมแนว VR Education</h3>
-                                <p>สื่อการสอนยุคใหม่เสมือนจริง</p>
-                                <a href="#" class="view-btn">ดูรายละเอียด</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <?php include "includes/footer.php"; ?>
-
-    <script>
-        const slider = document.querySelector('.project-slider');
-        const nextBtn = document.getElementById('nextBtn');
-        const prevBtn = document.getElementById('prevBtn');
-        let scrollAmount = 0;
-
-        nextBtn.addEventListener('click', () => {
-            const maxScroll = slider.scrollWidth - slider.clientWidth;
-            if (scrollAmount < maxScroll) {
-                scrollAmount += 320; 
-                slider.style.transform = `translateX(-${scrollAmount}px)`;
-            }
-        });
-
-        prevBtn.addEventListener('click', () => {
-            if (scrollAmount > 0) {
-                scrollAmount -= 320;
-                slider.style.transform = `translateX(-${scrollAmount}px)`;
-            }
-        });
-    </script>
-</body>
-</html>
+  // Smooth anchor offset
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click', (e)=>{
+      const id = a.getAttribute('href');
+      if(!id || id === '#') return;
+      const el = document.querySelector(id);
+      if(!el) return;
+      e.preventDefault();
+      const y = el.getBoundingClientRect().top + window.pageYOffset - 110;
+      window.scrollTo({top:y, behavior:'smooth'});
+    });
+  });
+})();
+</script>
