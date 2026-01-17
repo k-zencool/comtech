@@ -1,108 +1,149 @@
 <?php
 // includes/navbar.php
-// Navbar v2 (Clean / Modern / White-Pink)
 
 if (!function_exists('h')) {
-  function h($s){ return htmlspecialchars((string)($s ?? ''), ENT_QUOTES, 'UTF-8'); }
+  function h($s){
+    return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8');
+  }
 }
 
-$current = basename(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? 'index.php');
-function active($target, $current){
-  return $current === $target ? 'is-active' : '';
-}
+$brandTitle = 'แผนกคอมพิวเตอร์';
+$brandSub   = 'Computer Technology';
+$logoPath   = 'assets/images/logo.png';
+
+/* เมนู + icon (Material Symbols) */
+$navItems = [
+  ['label' => 'หน้าแรก',   'href' => '#home',       'icon' => 'home'],
+  ['label' => 'หลักสูตร',  'href' => '#curriculum', 'icon' => 'menu_book'],
+  ['label' => 'บุคลากร',   'href' => '#teachers',   'icon' => 'groups'],
+  ['label' => 'ผลงาน',     'href' => '#projects',   'icon' => 'emoji_events'],
+  ['label' => 'ข่าวสาร',   'href' => '#news',       'icon' => 'campaign'],
+  ['label' => 'รางวัล',    'href' => '#awards',     'icon' => 'workspace_premium'],
+];
+
+$fbUrl = 'https://www.facebook.com/profile.php?id=100063756753586';
 ?>
-<nav class="nav" id="nav">
-  <div class="nav__inner">
 
-    <a class="brand" href="index.php" aria-label="Go to home">
-      <span class="brand__logo">
-        <img src="assets/images/logo.png" alt="COMTECH Logo" onerror="this.style.display='none'">
-      </span>
-      <span class="brand__text">
-        <span class="brand__title">COMTECH</span>
-        <span class="brand__sub">Computer Technology Department</span>
-      </span>
-    </a>
+<!-- Google Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
 
-    <button class="nav__toggle" type="button" id="navToggle" aria-label="Open menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
+<div class="navbar-wrap">
+  <div class="container">
+    <div class="navbar" role="navigation" aria-label="เมนูหลัก">
 
-    <div class="nav__menu" id="navMenu">
-      <ul class="nav__links">
-        <li><a class="<?= active('index.php',$current) ?>" href="index.php"><i class="fa-solid fa-house"></i>หน้าแรก</a></li>
-        <li><a href="#news"><i class="fa-regular fa-newspaper"></i>ข่าวสาร</a></li>
-        <li><a href="#projects"><i class="fa-solid fa-rocket"></i>ผลงาน</a></li>
-        <li><a href="#teachers"><i class="fa-solid fa-chalkboard-user"></i>อาจารย์</a></li>
-        <li><a href="#curriculum"><i class="fa-solid fa-book-open"></i>หลักสูตร</a></li>
-      </ul>
+      <!-- Brand (แยก logo กับ text) -->
+      <a class="brand" href="#home" aria-label="กลับหน้าแรก">
+        <div class="brand-logo" aria-hidden="true">
+          <img src="<?= h($logoPath) ?>" alt="Logo"
+               onerror="this.style.display='none';">
+        </div>
 
-      <div class="nav__actions">
-        <a class="pill pill--ghost" href="tel:0000000000" title="โทร">
-          <i class="fa-solid fa-phone"></i><span>โทร</span>
+        <div class="brand-text">
+          <b><?= h($brandTitle) ?></b>
+          <small><?= h($brandSub) ?></small>
+        </div>
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="navlinks" aria-label="ลิงก์หน้าเว็บ">
+        <?php foreach ($navItems as $it): ?>
+          <a href="<?= h($it['href']) ?>">
+            <span class="material-symbols-outlined"><?= h($it['icon']) ?></span>
+            <?= h($it['label']) ?>
+          </a>
+        <?php endforeach; ?>
+      </nav>
+
+      <!-- Search -->
+      <div class="nav-search" role="search">
+        <span class="material-symbols-outlined">search</span>
+        <input type="text" placeholder="ค้นหา..." aria-label="ค้นหา">
+      </div>
+
+      <!-- Actions -->
+      <div class="nav-actions">
+        <a href="<?= h($fbUrl) ?>" target="_blank" class="fb-link" aria-label="Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+          </svg>
+          <span class="fb-text">Facebook</span>
         </a>
-        <a class="pill pill--primary" href="#" target="_blank" rel="noopener">
-          <i class="fa-brands fa-facebook-f"></i><span>Facebook</span>
-        </a>
+
+        <button class="burger" type="button" data-open-sidebar aria-label="เปิดเมนูมือถือ">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Overlay -->
+<div class="mobile-overlay" data-overlay></div>
+
+<!-- Mobile Sidebar -->
+<aside class="mobile-sidebar" data-sidebar aria-label="เมนูมือถือ">
+  <div class="ms-head">
+    <div class="ms-title">
+      <div class="badge">MENU</div>
+      <div style="line-height:1.1">
+        <div style="font-weight:900; font-size:14px;"><?= h($brandTitle) ?></div>
+        <div style="color:var(--muted); font-size:12px;"><?= h($brandSub) ?></div>
       </div>
     </div>
-
+    <button class="ms-close" type="button" data-close-sidebar aria-label="ปิดเมนู">✕</button>
   </div>
-</nav>
+
+  <div class="ms-body">
+    <nav class="ms-nav">
+      <?php foreach ($navItems as $it): ?>
+        <a href="<?= h($it['href']) ?>" class="ms-link">
+          <span style="display:flex; align-items:center; gap:10px;">
+            <span class="material-symbols-outlined" style="font-size:20px;"><?= h($it['icon']) ?></span>
+            <?= h($it['label']) ?>
+          </span>
+          <span style="color:var(--muted);">›</span>
+        </a>
+      <?php endforeach; ?>
+    </nav>
+
+    <div class="ms-actions">
+      <a class="btn btn-primary" href="#news" style="display:block; text-align:center;">ดูข่าวล่าสุด</a>
+      <a class="btn" href="<?= h($fbUrl) ?>" target="_blank" style="display:block; text-align:center;">Facebook</a>
+    </div>
+  </div>
+</aside>
 
 <script>
-// Navbar v2 JS (inline เพื่อให้มึงไม่ต้องแตกไฟล์ตอนนี้)
-(function(){
-  const nav = document.getElementById('nav');
-  const btn = document.getElementById('navToggle');
-  const menu = document.getElementById('navMenu');
+(() => {
+  const openBtn = document.querySelector('[data-open-sidebar]');
+  const closeBtn = document.querySelector('[data-close-sidebar]');
+  const overlay = document.querySelector('[data-overlay]');
+  const sidebar = document.querySelector('[data-sidebar]');
+  const msLinks = document.querySelectorAll('.ms-link');
 
-  // Sticky shadow on scroll
-  const onScroll = () => {
-    nav.classList.toggle('nav--scrolled', window.scrollY > 6);
-  };
-  onScroll();
-  window.addEventListener('scroll', onScroll, {passive:true});
+  if (!openBtn || !closeBtn || !overlay || !sidebar) return;
 
-  // Mobile toggle
-  const closeMenu = () => {
-    menu.classList.remove('is-open');
-    btn.classList.remove('is-open');
-    btn.setAttribute('aria-expanded', 'false');
-    document.documentElement.classList.remove('nav-lock');
+  const open = () => {
+    overlay.classList.add('open');
+    sidebar.classList.add('open');
+    document.body.style.overflow = 'hidden';
   };
 
-  btn.addEventListener('click', () => {
-    const open = !menu.classList.contains('is-open');
-    menu.classList.toggle('is-open', open);
-    btn.classList.toggle('is-open', open);
-    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-    document.documentElement.classList.toggle('nav-lock', open);
-  });
+  const close = () => {
+    overlay.classList.remove('open');
+    sidebar.classList.remove('open');
+    document.body.style.overflow = '';
+  };
 
-  // Close on link click (mobile)
-  menu.querySelectorAll('a[href^="#"], a[href$=".php"]').forEach(a=>{
-    a.addEventListener('click', () => {
-      if (window.matchMedia('(max-width: 900px)').matches) closeMenu();
-    });
-  });
+  openBtn.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', close);
 
-  // Close on ESC
-  document.addEventListener('keydown', (e)=>{
-    if(e.key === 'Escape') closeMenu();
-  });
+  msLinks.forEach(link => link.addEventListener('click', close));
 
-  // Smooth anchor offset (so it doesn't hide behind navbar)
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click', (e)=>{
-      const id = a.getAttribute('href');
-      if(!id || id === '#') return;
-      const el = document.querySelector(id);
-      if(!el) return;
-      e.preventDefault();
-      const y = el.getBoundingClientRect().top + window.pageYOffset - 90;
-      window.scrollTo({top:y, behavior:'smooth'});
-    });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') close();
   });
 })();
 </script>

@@ -1,256 +1,440 @@
 :root{
-  --pink:#c2185b;
-  --pink2:#e11d74;
-  --ink:#10131a;
-  --muted:#667085;
+  --bg:#ffffff;
+  --ink:#111827;
+  --muted:#6b7280;
+  --line:#e5e7eb;
 
-  --bg:#f6f7fb;
-  --paper:#ffffff;
+  --pink:#e11d48;
+  --pink-2:#fb7185;
+  --pink-soft:#fff1f2;
 
-  --line:rgba(16,19,26,.10);
-  --shadow:0 18px 42px rgba(16,19,26,.14);
-  --shadow2:0 10px 24px rgba(16,19,26,.10);
+  --radius:18px;
+  --radius-lg:24px;
 
-  --r-pill:999px;
-  --r:18px;
+  --shadow: 0 18px 46px rgba(17,24,39,.14);
+  --shadow-soft: 0 12px 30px rgba(17,24,39,.10);
 
-  --font-head:"Prompt", sans-serif;
-  --font-body:"Sarabun", sans-serif;
+  /* คุมระยะขอบ nav ให้ยืดตามจอแบบดูแพง */
+  --nav-pad: clamp(16px, 2.2vw, 40px);
 }
 
-html.nav-lock, html.nav-lock body{ overflow:hidden; }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{height:100%}
 
 body{
-  font-family: var(--font-body);
-  background: var(--bg);
-  color: var(--ink);
   margin:0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans Thai", sans-serif;
+  color:var(--ink);
+  background:
+    radial-gradient(900px 460px at 12% -10%, rgba(225,29,72,.10), transparent 55%),
+    radial-gradient(800px 420px at 90% 0%, rgba(251,113,133,.12), transparent 55%),
+    var(--bg);
 }
 
-/* Shell: makes it look floating + centered */
-.nav-shell{
-  position: sticky;
-  top: 14px;
-  z-index: 1200;
-  width: 100%;
-  display:flex;
-  justify-content:center;
-  padding: 0 14px;
+a{color:inherit; text-decoration:none}
+img{max-width:100%; display:block}
+
+/* container ปกติของเว็บ (ไม่ยุ่งมาก) */
+.container{
+  width:min(1440px, calc(100% - 40px));
+  margin-inline:auto;
 }
 
-/* Capsule */
-.nav-pill{
-  width: min(1200px, 100%);
-  background: rgba(255,255,255,.92);
-  border: 1px solid rgba(16,19,26,.08);
-  border-radius: var(--r-pill);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+/* ===== Navbar wrap ===== */
+.navbar-wrap{
+  position:fixed;
+  top:22px;
+  left:0;
+  right:0;
+  z-index:1000;
+  pointer-events:none;
+}
 
-  height: 76px;
-  padding: 10px 14px;
+/* ✅ ตัวนี้แหละ: ทำให้ NAV “ยืดตามจอ” */
+.navbar-wrap .container{
+  width: calc(100vw - (var(--nav-pad) * 2));
+  max-width: none;            /* ไม่ให้โดน cap */
+  margin-inline: auto;
+}
+
+/* ===== Navbar (capsule clean + pink accent) ===== */
+.navbar{
+  pointer-events:auto;
+  width:100%;
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap: 14px;
+  gap:12px;
+
+  padding:12px 22px;
+  border-radius:999px;
+
+  border:1px solid rgba(229,231,235,.58);
+  background: rgba(255,255,255,.80);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+  position:relative;
 }
 
-/* Brand */
-.pill-brand{
-  display:flex;
-  align-items:center;
-  gap: 12px;
-  text-decoration:none;
-  color: var(--ink);
-  min-width: 280px;
-}
-.pill-logo{
-  width: 54px;
-  height: 54px;
-  border-radius: 16px;
-  display:grid;
-  place-items:center;
+.navbar::before{
+  content:"";
+  position:absolute;
+  inset:-1px;
+  border-radius:999px;
+  pointer-events:none;
   background:
-    radial-gradient(70% 70% at 30% 30%, rgba(194,24,91,.20), transparent 58%),
-    linear-gradient(135deg, #fff, rgba(255,255,255,.65));
-  border: 1px solid rgba(194,24,91,.22);
-  box-shadow: 0 10px 22px rgba(194,24,91,.12);
-}
-.pill-logo img{
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
-  display:block;
-}
-.pill-brand-text{ line-height:1.05; display:flex; flex-direction:column; }
-.pill-title{
-  font-family: var(--font-head);
-  font-weight: 800;
-  letter-spacing: .6px;
-  font-size: 18px;
-}
-.pill-sub{
-  font-size: 12.5px;
-  color: var(--muted);
-  margin-top: 3px;
+    radial-gradient(1200px 220px at 18% 0%, rgba(225,29,72,.14), transparent 55%),
+    radial-gradient(900px 220px at 86% 120%, rgba(251,113,133,.10), transparent 55%);
+  opacity:.95;
 }
 
-/* Menu */
-.pill-menu{
+/* ===== Brand: แยก logo กับ text (ไม่อ้วน) ===== */
+.brand{
   display:flex;
   align-items:center;
-  gap: 14px;
-}
-
-.pill-links{
-  list-style:none;
-  margin:0;
+  gap:10px;
   padding:0;
+  border-radius:999px;
+}
+
+.brand-logo{
+  width:46px; height:46px;
+  border-radius:16px;
+  overflow:hidden;
+  display:grid; place-items:center;
+  flex:0 0 auto;
+
+  background: linear-gradient(135deg, rgba(225,29,72,.95), rgba(251,113,133,.92));
+  box-shadow: 0 14px 26px rgba(225,29,72,.20);
+  border:1px solid rgba(255,255,255,.45);
+}
+.brand-logo img{ width:100%; height:100%; object-fit:cover; }
+
+.brand-text{
+  padding:8px 12px;
+  border-radius:999px;
+  background: rgba(255,255,255,.55);
+  border:1px solid rgba(229,231,235,.60);
+  backdrop-filter: blur(10px);
+  transition: background .22s ease, border-color .22s ease, transform .22s ease;
+}
+.brand:hover .brand-text{
+  background: rgba(255,255,255,.70);
+  border-color: rgba(225,29,72,.14);
+  transform: translateY(-1px);
+}
+.brand-text b{
+  display:block;
+  font-size:14.6px;
+  letter-spacing:.1px;
+  line-height:1.05;
+}
+.brand-text small{
+  display:block;
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.05;
+}
+
+/* ===== Navlinks ===== */
+.navlinks{
   display:flex;
   align-items:center;
-  gap: 6px;
+  gap:10px;
+  background: transparent;
+  border:none;
+  padding:0;
+
+  /* ✅ กันเมนูล้น: ให้หดได้ แต่ไม่ทำของอื่นพัง */
+  min-width: 0;
 }
-.pill-links a{
-  font-family: var(--font-head);
-  font-weight: 700;
-  font-size: 14px;
-  color: var(--ink);
-  text-decoration:none;
-  padding: 10px 14px;
-  border-radius: var(--r-pill);
-  transition: .22s ease;
-  position: relative;
+
+.navlinks a{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  padding:10px 12px;
+  border-radius:999px;
+  font-size:13.5px;
+  white-space:nowrap;
+
+  border:1px solid transparent;
+  background: transparent;
+
+  transition: background .22s ease, color .22s ease, border-color .22s ease, transform .22s ease;
+  transition-timing-function:cubic-bezier(.22,1,.36,1);
 }
-.pill-links a:hover{
-  background: rgba(194,24,91,.08);
+
+.navlinks a .material-symbols-outlined{
+  font-size:18px;
+  color: rgba(17,24,39,.78);
+  transition: color .22s ease;
+}
+
+.navlinks a:hover{
+  background: rgba(255,255,255,.52);
+  border-color: rgba(225,29,72,.16);
   color: var(--pink);
   transform: translateY(-1px);
 }
-.pill-links a.is-active{
-  background: linear-gradient(180deg, rgba(194,24,91,.14), rgba(194,24,91,.06));
-  color: var(--pink);
-  border: 1px solid rgba(194,24,91,.18);
-}
+.navlinks a:hover .material-symbols-outlined{ color: var(--pink); }
 
-/* Actions */
-.pill-actions{
+.navlinks a.active{
+  background: linear-gradient(135deg, var(--pink), var(--pink-2));
+  color:#fff;
+  border-color: rgba(225,29,72,.18);
+  box-shadow:none;
+}
+.navlinks a.active .material-symbols-outlined{ color:#fff; }
+
+/* ===== Actions ===== */
+.nav-actions{
   display:flex;
   align-items:center;
-  gap: 10px;
-  margin-left: 6px;
+  gap:10px;
 }
-.pill-btn{
+
+/* ===== Search ===== */
+.nav-search{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  height:40px;
+  padding:0 12px;
+  border-radius:999px;
+
+  background: rgba(255,255,255,.42);
+  border:1px solid rgba(229,231,235,.55);
+  backdrop-filter: blur(10px);
+
+  transition: background .22s ease, border-color .22s ease, transform .22s ease;
+  transition-timing-function:cubic-bezier(.22,1,.36,1);
+}
+.nav-search .material-symbols-outlined{
+  font-size:20px;
+  color: var(--muted);
+  transition: color .22s ease;
+}
+.nav-search input{
+  border:none;
+  outline:none;
+  background: transparent;
+  width:110px;
+  font-size:13px;
+  color: var(--ink);
+  transition: width .25s cubic-bezier(.22,1,.36,1);
+}
+.nav-search input::placeholder{ color: var(--muted); }
+
+.nav-search:hover,
+.nav-search:focus-within{
+  background: rgba(255,255,255,.60);
+  border-color: rgba(225,29,72,.18);
+  transform: translateY(-1px);
+}
+.nav-search:hover .material-symbols-outlined,
+.nav-search:focus-within .material-symbols-outlined{ color: var(--pink); }
+.nav-search:focus-within input{ width:250px; }
+
+/* ===== FB button ===== */
+.fb-link{
+  height:46px;
+  padding:0 14px;
+  border-radius:999px;
   display:inline-flex;
   align-items:center;
-  justify-content:center;
-  gap: 10px;
-  height: 44px;
-  padding: 0 14px;
-  border-radius: var(--r-pill);
-  text-decoration:none;
-  font-family: var(--font-head);
-  font-weight: 800;
-  font-size: 13px;
-  border: 1px solid transparent;
-  transition: .22s ease;
-  user-select:none;
-  cursor:pointer;
-}
-.pill-btn--ghost{
-  width: 44px;
-  padding: 0;
-  background:#fff;
-  color: var(--ink);
-  border-color: rgba(16,19,26,.10);
-}
-.pill-btn--ghost:hover{
-  transform: translateY(-2px);
-  border-color: rgba(194,24,91,.25);
-  box-shadow: var(--shadow2);
-  color: var(--pink);
-}
-.pill-btn--primary{
-  background: linear-gradient(180deg, var(--pink2), var(--pink));
+  gap:10px;
+
+  background:#1877F2;
   color:#fff;
-  box-shadow: 0 14px 28px rgba(194,24,91,.22);
-  border-color: rgba(194,24,91,.22);
-}
-.pill-btn--primary:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 18px 34px rgba(194,24,91,.30);
-}
-.pill-btn--primary span{ display:inline-block; }
 
-/* Mobile toggle */
-.pill-toggle{
-  display:none;
-  width: 46px;
-  height: 46px;
-  border-radius: 16px;
-  border: 1px solid rgba(16,19,26,.10);
-  background:#fff;
+  box-shadow: 0 12px 26px rgba(24,119,242,.18);
+  transition: transform .22s ease, box-shadow .22s ease;
+}
+.fb-link svg{ width:20px; height:20px; }
+.fb-link .fb-text{
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:.1px;
+}
+.fb-link:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 16px 32px rgba(24,119,242,.22);
+}
+.fb-link:active{ transform: scale(.98); }
+
+/* burger */
+.burger{
+  width:46px; height:46px;
+  border-radius:999px;
+  border:1px solid rgba(229,231,235,.72);
+  background: rgba(255,255,255,.72);
+  backdrop-filter: blur(10px);
   cursor:pointer;
-  position: relative;
-  transition: .22s ease;
+
+  display:none;
+  place-items:center;
+
+  transition: transform .22s ease, background .22s ease, border-color .22s ease;
 }
-.pill-toggle:hover{ transform: translateY(-1px); border-color: rgba(194,24,91,.25); }
-.pill-toggle span{
-  position:absolute;
-  left: 12px; right: 12px;
-  height: 2px;
+.burger:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.82);
+  border-color: rgba(225,29,72,.14);
+}
+.burger span{
+  width:18px; height:2px;
   background: var(--ink);
-  border-radius: 2px;
-  transition: transform .22s ease, top .22s ease, opacity .22s ease;
+  position:relative;
+  border-radius:2px;
+  display:block;
 }
-.pill-toggle span:nth-child(1){ top: 15px; }
-.pill-toggle span:nth-child(2){ top: 22px; }
-.pill-toggle span:nth-child(3){ top: 29px; }
-.pill-toggle.is-open span:nth-child(1){ top: 22px; transform: rotate(45deg); }
-.pill-toggle.is-open span:nth-child(2){ opacity: 0; }
-.pill-toggle.is-open span:nth-child(3){ top: 22px; transform: rotate(-45deg); }
+.burger span::before,
+.burger span::after{
+  content:"";
+  position:absolute;
+  left:0; right:0;
+  height:2px;
+  background: var(--ink);
+  border-radius:2px;
+}
+.burger span::before{ top:-6px; }
+.burger span::after{ top:6px; }
 
-/* Responsive */
+/* spacing under fixed nav */
+.topbar-space{ height: 96px; }
+
+/* ===== Mobile Sidebar (เดิม) ===== */
+.mobile-overlay{
+  position:fixed;
+  inset:0;
+  background: rgba(17,24,39,.28);
+  backdrop-filter: blur(6px);
+  z-index:1100;
+  display:none;
+  opacity:0;
+  transition: opacity .22s ease;
+}
+.mobile-overlay.open{ display:block; opacity:1; }
+
+.mobile-sidebar{
+  position:fixed;
+  top:14px;
+  right:14px;
+  height: calc(100% - 28px);
+  width: min(380px, 90vw);
+
+  background: rgba(255,255,255,.72);
+  backdrop-filter: blur(14px);
+
+  border: 1px solid rgba(255,255,255,.55);
+  box-shadow:
+    0 30px 70px rgba(17,24,39,.22),
+    0 10px 24px rgba(17,24,39,.12);
+
+  border-radius: 26px;
+  z-index:1200;
+
+  transform: translateX(110%);
+  transition: transform .34s cubic-bezier(.22,1,.36,1);
+
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.mobile-sidebar.open{ transform: translateX(0); }
+
+.ms-head{
+  padding:16px 16px 12px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  border-bottom: 1px solid rgba(229,231,235,.65);
+  background: linear-gradient(180deg, rgba(255,255,255,.60), rgba(255,255,255,.35));
+}
+.ms-head .ms-title{ display:flex; align-items:center; gap:10px; }
+
+.ms-head .badge{
+  font-size:12px;
+  font-weight:900;
+  color: var(--pink);
+  background: rgba(225,29,72,.10);
+  border: 1px solid rgba(225,29,72,.18);
+  padding:6px 10px;
+  border-radius:999px;
+}
+
+.ms-close{
+  width:44px; height:44px;
+  border-radius:16px;
+  border: 1px solid rgba(255,255,255,.55);
+  background: rgba(255,255,255,.70);
+  backdrop-filter: blur(10px);
+  cursor:pointer;
+  transition: transform .18s ease;
+}
+.ms-close:hover{ transform: translateY(-1px); }
+.ms-close:active{ transform: scale(.98); }
+
+.ms-body{ padding:12px 12px 14px; overflow:auto; }
+.ms-nav{ display:flex; flex-direction:column; gap:12px; }
+
+.ms-nav a{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 16px;
+  border-radius:20px;
+  font-size:14.5px;
+  line-height:1.4;
+  border:1px solid rgba(255,255,255,.45);
+  background: rgba(255,255,255,.46);
+  transition: transform .22s ease, background .22s ease, border-color .22s ease;
+}
+.ms-nav a:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,.74);
+  border-color: rgba(225,29,72,.14);
+}
+.ms-nav a.active{
+  background: linear-gradient(135deg, rgba(225,29,72,.16), rgba(251,113,133,.10));
+  color: var(--pink);
+  font-weight:900;
+  border-color: rgba(225,29,72,.22);
+}
+
+.ms-actions{
+  margin-top:12px;
+  padding-top:12px;
+  border-top: 1px solid rgba(229,231,235,.65);
+  display:grid;
+  gap:10px;
+}
+
+/* responsive */
 @media (max-width: 980px){
-  .pill-toggle{ display:block; }
-
-  .nav-pill{
-    border-radius: 22px; /* capsule บนมือถือให้เป็นบล็อกโค้ง */
-    height: auto;
-    padding: 12px;
-  }
-
-  .pill-menu{
-    width: 100%;
-    display:none;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-    padding-top: 10px;
-  }
-  .pill-menu.is-open{ display:flex; }
-
-  .pill-links{
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-  .pill-links a{
-    border: 1px solid rgba(16,19,26,.08);
-    background: #fff;
-    padding: 12px 14px;
-  }
-
-  .pill-actions{
-    justify-content: stretch;
-    margin-left: 0;
-  }
-  .pill-btn{ width: 100%; }
-  .pill-btn--ghost{ width: 100%; }
+  .navlinks{ display:none; }
+  .nav-search{ display:none; }
+  .burger{ display:grid; }
+  .brand-text{ padding:7px 10px; }
 }
 
-/* Small polish */
 @media (max-width: 520px){
-  .pill-brand{ min-width: 0; }
-  .pill-sub{ display:none; } /* มือถือให้โล่ง */
+  .navbar-wrap .container{
+    width: calc(100vw - 24px);
+  }
+  .navbar{ padding:10px 12px; }
+  .brand-text{ display:none; }
+  .topbar-space{ height: 90px; }
+
+  .mobile-sidebar{
+    top:10px;
+    right:10px;
+    height: calc(100% - 20px);
+    border-radius: 22px;
+  }
 }

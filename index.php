@@ -1,94 +1,62 @@
 <?php
-// includes/navbar.php — Capsule Floating Navbar (Formal)
-if (!function_exists('h')) {
-  function h($s){ return htmlspecialchars((string)($s ?? ''), ENT_QUOTES, 'UTF-8'); }
-}
-$current = basename(parse_url($_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH) ?? 'index.php');
-function active($target, $current){ return $current === $target ? 'is-active' : ''; }
+$brandTitle = 'แผนกคอมพิวเตอร์';
+$brandSub   = 'Computer Technology';
+$logoPath   = 'assets/images/logo.png';
 ?>
-<div class="nav-shell">
-  <nav class="nav-pill" id="navPill" aria-label="Main navigation">
-    <a class="pill-brand" href="index.php" aria-label="Home">
-      <span class="pill-logo">
-        <img src="assets/images/logo.png" alt="COMTECH Logo" />
-      </span>
-      <span class="pill-brand-text">
-        <span class="pill-title">COMTECH</span>
-        <span class="pill-sub">Computer Technology Department</span>
-      </span>
-    </a>
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title><?= htmlspecialchars($brandTitle) ?></title>
 
-    <button class="pill-toggle" type="button" id="pillToggle" aria-expanded="false" aria-label="Open menu">
-      <span></span><span></span><span></span>
-    </button>
+  <!-- CSS หลักไฟล์เดียว -->
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/nav-style.css">
 
-    <div class="pill-menu" id="pillMenu">
-      <ul class="pill-links">
-        <li><a class="<?= active('index.php',$current) ?>" href="index.php">หน้าแรก</a></li>
-        <li><a href="#news">ข่าวสาร</a></li>
-        <li><a href="#projects">ผลงาน</a></li>
-        <li><a href="#teachers">อาจารย์</a></li>
-        <li><a href="#curriculum">หลักสูตร</a></li>
-      </ul>
+  <!-- Google Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+</head>
+<body>
 
-      <div class="pill-actions">
-        <a class="pill-btn pill-btn--ghost" href="tel:0000000000" title="โทร">
-          <i class="fa-solid fa-phone"></i>
-        </a>
-        <a class="pill-btn pill-btn--primary" href="#" target="_blank" rel="noopener">
-          <i class="fa-brands fa-facebook-f"></i>
-          <span>Facebook</span>
-        </a>
-      </div>
+<?php require __DIR__ . '/includes/navbar.php'; ?>
+<div class="topbar-space"></div>
+
+<!-- =========================
+     HERO SECTION
+========================= -->
+<section id="home" class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+
+  <div class="container hero-content">
+    <span class="hero-badge">
+      <span class="material-symbols-outlined">school</span>
+      เว็บไซต์ทางการแผนก
+    </span>
+
+    <h1 class="hero-title">
+      แผนกวิชาเทคโนโลยีคอมพิวเตอร์
+    </h1>
+
+    <p class="hero-desc">
+      เรียนรู้ด้านเทคโนโลยีคอมพิวเตอร์อย่างเป็นระบบ  
+      เน้นปฏิบัติจริง พัฒนาทักษะสู่สายอาชีพและการศึกษาต่อ
+    </p>
+
+    <div class="hero-actions">
+      <a href="#curriculum" class="hero-btn primary">
+        <span class="material-symbols-outlined">menu_book</span>
+        หลักสูตร
+      </a>
+
+      <a href="#projects" class="hero-btn ghost">
+        <span class="material-symbols-outlined">emoji_events</span>
+        ผลงานนักศึกษา
+      </a>
     </div>
-  </nav>
-</div>
+  </div>
+</section>
 
-<script>
-(function(){
-  const btn = document.getElementById('pillToggle');
-  const menu = document.getElementById('pillMenu');
-
-  const open = () => {
-    menu.classList.add('is-open');
-    btn.classList.add('is-open');
-    btn.setAttribute('aria-expanded', 'true');
-    document.documentElement.classList.add('nav-lock');
-  };
-  const close = () => {
-    menu.classList.remove('is-open');
-    btn.classList.remove('is-open');
-    btn.setAttribute('aria-expanded', 'false');
-    document.documentElement.classList.remove('nav-lock');
-  };
-
-  btn.addEventListener('click', () => {
-    menu.classList.contains('is-open') ? close() : open();
-  });
-
-  // close on click link (mobile)
-  menu.querySelectorAll('a').forEach(a=>{
-    a.addEventListener('click', ()=>{
-      if (window.matchMedia('(max-width: 980px)').matches) close();
-    });
-  });
-
-  // esc close
-  document.addEventListener('keydown', (e)=>{
-    if (e.key === 'Escape') close();
-  });
-
-  // Smooth anchor offset
-  document.querySelectorAll('a[href^="#"]').forEach(a=>{
-    a.addEventListener('click', (e)=>{
-      const id = a.getAttribute('href');
-      if(!id || id === '#') return;
-      const el = document.querySelector(id);
-      if(!el) return;
-      e.preventDefault();
-      const y = el.getBoundingClientRect().top + window.pageYOffset - 110;
-      window.scrollTo({top:y, behavior:'smooth'});
-    });
-  });
-})();
-</script>
+</body>
+</html>
