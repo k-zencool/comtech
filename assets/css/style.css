@@ -1,286 +1,162 @@
 /* =========================
-   HERO SECTION (Readable on Photo + Pink Accent + Motion)
+   CORE SETUP & VARIABLES
 ========================= */
+:root {
+  --bg: #ffffff;
+  --ink: #111827;
+  --muted: #6b7280;
+  --line: rgba(229, 231, 235, 0.7);
 
-.hero{
+  --pink: #e11d48;
+  --pink-2: #fb7185;
+  --pink-soft: rgba(225, 29, 72, 0.08);
+
+  --radius: 18px;
+  --radius-lg: 24px;
+
+  --shadow: 0 18px 46px rgba(17, 24, 39, 0.14);
+  --shadow-soft: 0 12px 30px rgba(17, 24, 39, 0.10);
+  
+  --ease: cubic-bezier(0.3, 1, 0.2, 1);
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; height: 100%; }
+
+body {
+  margin: 0;
+  font-family: 'Kanit', system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; transition: 0.25s var(--ease); }
+img { max-width: 100%; height: auto; display: block; }
+
+.container {
+  width: min(1440px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+/* Space for fixed navbar */
+.topbar-space { height: 88px; }
+
+/* =========================
+   HERO SECTION
+========================= */
+.hero {
   position: relative;
-  min-height: 78vh;
+  min-height: 80vh;
   display: flex;
   align-items: center;
   overflow: hidden;
   color: #fff;
+  background: #0a0e17; /* Fallback color */
 }
 
-/* Background photo */
-.hero-bg{
+/* Background photo with motion */
+.hero-bg {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 24px;
-
+  inset: 0;
   background: url("../images/hero-bg.jpg") center / cover no-repeat;
-  filter: saturate(1.03) contrast(1.08);
+  filter: saturate(1.05) contrast(1.1);
   transform: scale(1.02);
   z-index: 1;
 }
 
-/* Overlay: ทำให้ “อ่านชัด” บนรูปสว่าง/รก ได้ */
-.hero-overlay{
+/* Deep Overlay for readability */
+.hero-overlay {
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  top: 14px;
-
-  background:
-    radial-gradient(900px 520px at 22% 40%, rgba(225,29,72,.18), transparent 60%),
-    radial-gradient(820px 520px at 90% 30%, rgba(251,113,133,.14), transparent 62%),
-    linear-gradient(
-      120deg,
-      rgba(10,14,23,.72),
-      rgba(10,14,23,.58),
-      rgba(225,29,72,.34)
-    );
-
+  inset: 0;
+  background: 
+    radial-gradient(900px 520px at 22% 40%, rgba(225, 29, 72, 0.2), transparent 60%),
+    linear-gradient(120deg, rgba(10, 14, 23, 0.85) 30%, rgba(10, 14, 23, 0.4) 70%, rgba(225, 29, 72, 0.2));
   z-index: 2;
 }
 
-/* Floating blobs (อยู่หลังการ์ดข้อความ) */
-.hero::before,
-.hero::after{
-  content:"";
-  position:absolute;
-  z-index: 2;
-  pointer-events:none;
-  border-radius: 999px;
-  filter: blur(28px);
-  opacity: .55; /* ลดลง ไม่ให้กลบ text */
+/* Floating Animation Blobs */
+.hero::before, .hero::after {
+  content: ""; position: absolute; z-index: 2; pointer-events: none;
+  border-radius: 999px; filter: blur(60px); opacity: 0.4;
+}
+.hero::before {
+  width: 400px; height: 400px; left: -100px; top: 10%;
+  background: var(--pink); animation: heroFloat1 12s infinite;
+}
+.hero::after {
+  width: 500px; height: 500px; right: -150px; bottom: -50px;
+  background: var(--pink-2); animation: heroFloat2 15s infinite;
 }
 
-.hero::before{
-  width: 440px;
-  height: 440px;
-  left: -160px;
-  top: 120px;
-  background: radial-gradient(circle at 30% 30%, rgba(225,29,72,.42), rgba(251,113,133,.14), transparent 62%);
-  animation: heroFloat1 11s ease-in-out infinite;
+@keyframes heroFloat1 {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(30px, -20px) scale(1.05); }
+}
+@keyframes heroFloat2 {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  50% { transform: translate(-20px, 30px) scale(1.05); }
 }
 
-.hero::after{
-  width: 560px;
-  height: 560px;
-  right: -220px;
-  bottom: -220px;
-  background: radial-gradient(circle at 35% 35%, rgba(251,113,133,.38), rgba(225,29,72,.12), transparent 64%);
-  animation: heroFloat2 13s ease-in-out infinite;
-}
-
-@keyframes heroFloat1{
-  0%,100%{ transform: translate(0,0) scale(1); }
-  50%{ transform: translate(18px, -14px) scale(1.02); }
-}
-@keyframes heroFloat2{
-  0%,100%{ transform: translate(0,0) scale(1); }
-  50%{ transform: translate(-14px, 16px) scale(1.02); }
-}
-
-/* Bokeh (เบาลง) */
-.hero-overlay::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-
-  background:
-    radial-gradient(10px 10px at 14% 82%, rgba(255,255,255,.22), transparent 60%),
-    radial-gradient(14px 14px at 26% 94%, rgba(251,113,133,.20), transparent 62%),
-    radial-gradient(8px 8px at 38% 86%, rgba(255,255,255,.18), transparent 60%),
-    radial-gradient(16px 16px at 60% 96%, rgba(251,113,133,.18), transparent 62%),
-    radial-gradient(10px 10px at 74% 88%, rgba(255,255,255,.16), transparent 60%),
-    radial-gradient(18px 18px at 90% 94%, rgba(251,113,133,.18), transparent 62%);
-
-  filter: blur(1px);
-  opacity: .35;
-  transform: translateY(14px);
-  animation: bokehUp 9.5s ease-in-out infinite;
-}
-
-@keyframes bokehUp{
-  0%,100%{ transform: translateY(14px); opacity: .25; }
-  50%{ transform: translateY(-10px); opacity: .45; }
-}
-
-/* Shimmer (เบาลง) */
-.hero-overlay::after{
-  content:"";
-  position:absolute;
-  inset:-30%;
-  pointer-events:none;
-
-  background:
-    linear-gradient(
-      120deg,
-      transparent 38%,
-      rgba(255,255,255,.10) 50%,
-      transparent 62%
-    );
-
-  transform: translateX(-18%) rotate(6deg);
-  animation: shimmerSweep 11s ease-in-out infinite;
-  opacity: .22;
-}
-
-@keyframes shimmerSweep{
-  0%,100%{ transform: translateX(-20%) rotate(6deg); }
-  50%{ transform: translateX(18%) rotate(6deg); }
-}
-
-/* Content */
-.hero-content{
+/* Content & Hero Card */
+.hero-content {
   position: relative;
   z-index: 3;
-  max-width: 760px;
-  padding: 28px 0;
+  max-width: 800px;
 }
 
-/* ทำการ์ดให้ “อ่านชัด” บนรูป: dark glass */
-.hero-content .hero-card{
-  padding: 28px 28px;
-  border-radius: var(--radius-lg);
-  background: rgba(10,14,23,.46);
-  border: 1px solid rgba(255,255,255,.14);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 18px 44px rgba(0,0,0,.24);
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 14px; font-weight: 600; color: #fff;
+  margin-bottom: 24px; backdrop-filter: blur(4px);
 }
 
-/* Badge */
-.hero-badge{
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 14px;
-  border-radius: 999px;
-
-  background: rgba(255,255,255,.10);
-  border: 1px solid rgba(251,113,133,.26);
-  color: rgba(255,255,255,.92);
-
-  font-size: 13px;
-  font-weight: 800;
-  margin-bottom: 14px;
+.hero-title {
+  font-size: clamp(36px, 6vw, 64px);
+  line-height: 1.1; margin: 0 0 16px;
+  font-weight: 800; letter-spacing: -1px;
 }
 
-.hero-title{
-  font-size: clamp(34px, 4.6vw, 52px);
-  line-height: 1.08;
-  margin: 0 0 10px;
-  letter-spacing: -0.6px;
-  color: #fff;
+.hero-desc {
+  font-size: clamp(16px, 2vw, 18px);
+  line-height: 1.6; opacity: 0.85;
+  margin-bottom: 32px; max-width: 60ch;
 }
 
-.hero-desc{
-  font-size: 15.5px;
-  line-height: 1.75;
-  max-width: 58ch;
-  color: rgba(255,255,255,.80);
-  margin: 0 0 22px;
+/* Action Buttons */
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+
+.hero-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 28px; border-radius: 999px;
+  font-weight: 700; transition: 0.3s var(--ease);
 }
 
-/* Buttons */
-.hero-actions{
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.hero-btn{
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 18px;
-  border-radius: 999px;
-  font-weight: 800;
-  font-size: 14px;
-  border: 1px solid transparent;
-  transition: transform .22s cubic-bezier(.22,1,.36,1),
-              background .22s ease,
-              color .22s ease,
-              border-color .22s ease,
-              box-shadow .22s ease,
-              filter .22s ease;
-  will-change: transform;
-}
-
-/* primary: ชมพูเด่น */
-.hero-btn.primary{
+.hero-btn.primary {
   background: linear-gradient(135deg, var(--pink), var(--pink-2));
-  color: #fff;
-  box-shadow: 0 0 0 0 rgba(225,29,72,0);
+  color: #fff; box-shadow: 0 10px 25px -5px rgba(225, 29, 72, 0.4);
 }
-.hero-btn.primary:hover{
-  transform: translateY(-2px);
-  filter: brightness(.97);
-  box-shadow: 0 0 0 6px rgba(225,29,72,.14);
-}
-
-/* ghost: ดำใส + ขอบขาว */
-.hero-btn.ghost{
-  background: rgba(255,255,255,.10);
-  border-color: rgba(255,255,255,.22);
-  color: rgba(255,255,255,.92);
-}
-.hero-btn.ghost:hover{
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.14);
-  border-color: rgba(251,113,133,.30);
-  box-shadow: 0 0 0 6px rgba(225,29,72,.08);
+.hero-btn.ghost {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff; backdrop-filter: blur(10px);
 }
 
-/* badge hover */
-.hero-badge:hover{
-  transform: translateY(-2px);
-  background: rgba(255,255,255,.12);
-  box-shadow: 0 0 0 6px rgba(225,29,72,.10);
+.hero-btn:hover { transform: translateY(-3px); filter: brightness(1.1); }
+.hero-btn:active { transform: translateY(0) scale(0.96); }
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .hero { min-height: 70vh; text-align: center; }
+  .hero-content { display: flex; flex-direction: column; align-items: center; }
+  .hero-actions { justify-content: center; }
+  .hero-bg, .hero-overlay { top: 0; }
+  .topbar-space { height: 76px; }
 }
 
-/* active feedback */
-.hero-badge:active,
-.hero-btn:active{
-  transform: translateY(0) scale(.98);
-}
-
-/* focus visible */
-.hero-badge:focus-visible,
-.hero-btn:focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 6px rgba(225,29,72,.18);
-}
-
-/* responsive */
-@media (max-width: 768px){
-  .hero{ min-height: 72vh; }
-  .hero-bg, .hero-overlay{ top: 66px; }
-  .hero::before{ width: 320px; height: 320px; left: -160px; top: 120px; }
-  .hero::after{ width: 420px; height: 420px; right: -180px; bottom: -240px; }
-  .hero-content .hero-card{ padding: 22px 20px; }
-}
-
-/* ลด motion */
-@media (prefers-reduced-motion: reduce){
-  .hero::before,
-  .hero::after,
-  .hero-overlay::before,
-  .hero-overlay::after{
-    animation: none !important;
-  }
-  .hero-badge,
-  .hero-btn{
-    transition: none !important;
-  }
-  .hero-badge:hover,
-  .hero-btn:hover{
-    transform: none !important;
-    box-shadow: none !important;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .hero::before, .hero::after, .hero-bg { animation: none !important; transform: none !important; }
 }

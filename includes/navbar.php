@@ -2,7 +2,8 @@
 // includes/navbar.php
 
 if (!function_exists('h')) {
-  function h($s){
+  function h($s)
+  {
     return htmlspecialchars($s ?? '', ENT_QUOTES, 'UTF-8');
   }
 }
@@ -35,7 +36,7 @@ $fbUrl = 'https://www.facebook.com/profile.php?id=100063756753586';
       <a class="brand" href="#home" aria-label="กลับหน้าแรก">
         <div class="brand-logo" aria-hidden="true">
           <img src="<?= h($logoPath) ?>" alt="Logo"
-               onerror="this.style.display='none';">
+            onerror="this.style.display='none';">
         </div>
 
         <div class="brand-text">
@@ -55,16 +56,28 @@ $fbUrl = 'https://www.facebook.com/profile.php?id=100063756753586';
       </nav>
 
       <!-- Search -->
-      <div class="nav-search" role="search">
-        <span class="material-symbols-outlined">search</span>
-        <input type="text" placeholder="ค้นหา..." aria-label="ค้นหา">
-      </div>
+      <!-- Search -->
+      <form class="nav-search" role="search" action="#" method="get">
+        <span class="material-symbols-outlined" aria-hidden="true">search</span>
+
+        <input
+          type="search"
+          name="q"
+          placeholder="ค้นหา..."
+          aria-label="ค้นหา"
+          autocomplete="off">
+
+        <button type="submit" aria-label="ค้นหา">
+          <span class="material-symbols-outlined" aria-hidden="true">arrow_forward</span>
+        </button>
+      </form>
+
 
       <!-- Actions -->
       <div class="nav-actions">
         <a href="<?= h($fbUrl) ?>" target="_blank" class="fb-link" aria-label="Facebook">
           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16" aria-hidden="true">
-            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+            <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z" />
           </svg>
           <span class="fb-text">Facebook</span>
         </a>
@@ -115,35 +128,35 @@ $fbUrl = 'https://www.facebook.com/profile.php?id=100063756753586';
 </aside>
 
 <script>
-(() => {
-  const openBtn = document.querySelector('[data-open-sidebar]');
-  const closeBtn = document.querySelector('[data-close-sidebar]');
-  const overlay = document.querySelector('[data-overlay]');
-  const sidebar = document.querySelector('[data-sidebar]');
-  const msLinks = document.querySelectorAll('.ms-link');
+  (() => {
+    const openBtn = document.querySelector('[data-open-sidebar]');
+    const closeBtn = document.querySelector('[data-close-sidebar]');
+    const overlay = document.querySelector('[data-overlay]');
+    const sidebar = document.querySelector('[data-sidebar]');
+    const msLinks = document.querySelectorAll('.ms-link');
 
-  if (!openBtn || !closeBtn || !overlay || !sidebar) return;
+    if (!openBtn || !closeBtn || !overlay || !sidebar) return;
 
-  const open = () => {
-    overlay.classList.add('open');
-    sidebar.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  };
+    const open = () => {
+      overlay.classList.add('open');
+      sidebar.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
 
-  const close = () => {
-    overlay.classList.remove('open');
-    sidebar.classList.remove('open');
-    document.body.style.overflow = '';
-  };
+    const close = () => {
+      overlay.classList.remove('open');
+      sidebar.classList.remove('open');
+      document.body.style.overflow = '';
+    };
 
-  openBtn.addEventListener('click', open);
-  closeBtn.addEventListener('click', close);
-  overlay.addEventListener('click', close);
+    openBtn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', close);
 
-  msLinks.forEach(link => link.addEventListener('click', close));
+    msLinks.forEach(link => link.addEventListener('click', close));
 
-  window.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') close();
-  });
-})();
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') close();
+    });
+  })();
 </script>
