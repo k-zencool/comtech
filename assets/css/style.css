@@ -1154,3 +1154,486 @@ img {
     .staff-info { width: 100%; align-items: center; }
     .staff-social { justify-content: center; }
 }
+
+/* =========================================
+   AWARDS SECTION - GRID DESIGN [cite: 2025-07-09]
+   ========================================= */
+.awards-section {
+    padding: 60px 0;
+    background-color: #ffffff;
+}
+
+.awards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.award-card {
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #f1f5f9;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    transition: 0.3s var(--ease);
+}
+
+.award-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+}
+
+/* ส่วนแสดงผลภาพ/ไอคอน [cite: 2025-07-09] */
+.award-visual {
+    position: relative;
+    height: 200px;
+    background: #f1f5f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.award-tag-year {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: var(--pink);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 999px;
+    z-index: 2;
+}
+
+.award-img-render {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* บังคับรูปเต็มพื้นที่ [cite: 2025-05-31] */
+}
+
+.award-placeholder {
+    text-align: center;
+    color: #f1c40f; /* สีทองรางวัล [cite: 2025-05-31] */
+}
+
+.award-placeholder span {
+    font-size: 80px !important;
+}
+
+.award-placeholder small {
+    display: block;
+    color: #94a3b8;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-top: -10px;
+}
+
+.award-body {
+    padding: 20px;
+}
+
+.award-body h4 {
+    margin: 0 0 12px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.4;
+    min-height: 44px;
+}
+
+.award-info-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #64748b;
+    font-size: 13px;
+}
+
+
+/* =========================================
+   PROJECTS SECTION - DARK SLIDER STYLE [cite: 2025-07-09]
+   ========================================= */
+.projects-section-dark {
+    padding: 80px 0;
+    position: relative;
+    background-color: #0a0e17; 
+    /* ภาพพื้นหลังโทนเข้ม [cite: 2026-01-18] */
+    background-image: url('../images/project-pattern.jpg') !important; 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.pj-bg-overlay {
+    position: absolute;
+    inset: 0;
+    /* เน้นเข้มเพื่อให้การ์ดเด้ง [cite: 2025-05-31] */
+    background: linear-gradient(180deg, rgba(10, 14, 23, 0.95) 0%, rgba(225, 29, 72, 0.05) 100%);
+    z-index: -1;
+}
+
+/* 🟢 Wrapper ปรับระยะห่างกัน Pagination ทับ [cite: 2025-07-09] */
+.news-slider-wrapper {
+    position: relative;
+    padding-bottom: 30px; /* เพิ่มพื้นที่ด้านล่างให้จุด Pagination [cite: 2025-07-09] */
+    margin-top: 10px;
+}
+
+/* Card Design [cite: 2025-07-09] */
+.pj-dark-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    overflow: hidden;
+    height: 100%;
+    transition: 0.4s var(--ease);
+}
+
+.pj-dark-card:hover {
+    border-color: var(--pink-2);
+    transform: translateY(-10px);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.pj-thumb {
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+.pj-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.6s ease;
+}
+
+.pj-dark-card:hover .pj-thumb img { transform: scale(1.1); }
+
+.pj-tag {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--pink);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.pj-body {
+    padding: 25px;
+}
+
+.pj-body h4 {
+    color: #fff;
+    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.pj-student {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.pj-student span { font-size: 18px; }
+
+.pj-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--pink-2);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.pj-btn:hover { color: #fff; }
+.pj-btn span { font-size: 18px; transition: 0.3s; }
+.pj-btn:hover span { transform: translateX(5px); }
+
+/* 🟢 Pagination Custom - แก้ไขตำแหน่งและดีไซน์ */
+.pj-pagination.swiper-pagination-bullets {
+    bottom: 0 !important; /* ดันลงมาล่างสุดของ Wrapper [cite: 2025-07-09] */
+}
+
+.pj-pagination .swiper-pagination-bullet { 
+    background: rgba(255, 255, 255, 0.2) !important; 
+    opacity: 1;
+    transition: 0.4s;
+}
+
+/* จุดที่กำลังแสดงผล (ทำให้ยาวสีชมพู) */
+.pj-pagination .swiper-pagination-bullet-active { 
+    background: var(--pink) !important; 
+    width: 35px !important; /* ปรับให้ยาวตามรูป */
+    border-radius: 10px; 
+}
+
+/* Navigation Buttons [cite: 2025-07-09] */
+.pj-prev, .pj-next { 
+    background: rgba(255, 255, 255, 0.05) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.1) !important; 
+    color: #fff !important; 
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+    top: 45% !important; /* จัดให้อยู่กลางแนวตั้งของการ์ด [cite: 2025-07-09] */
+}
+
+.pj-prev:hover, .pj-next:hover { background: var(--pink) !important; border-color: var(--pink) !important; }
+
+/* Placeholder [cite: 2025-05-31] */
+.pj-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1a1a1a;
+    color: rgba(255, 255, 255, 0.1);
+}
+.pj-placeholder span { font-size: 80px !important; }
+
+
+
+
+
+
+
+/* =========================================
+   MAIN FOOTER DESIGN [cite: 2025-07-09]
+   ========================================= */
+.main-footer {
+    background-color: #0f172a; /* โทนเข้มจัด [cite: 2025-05-31] */
+    color: #94a3b8;
+    padding: 80px 0 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.2fr;
+    gap: 40px;
+    margin-bottom: 60px;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.footer-logo img { height: 45px; }
+.footer-logo span {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+.footer-about {
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 25px;
+}
+
+.footer-social-links {
+    display: flex;
+    gap: 15px;
+}
+
+.footer-social-links a {
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    transition: 0.3s;
+}
+
+.footer-social-links a:hover {
+    background: var(--pink);
+    transform: translateY(-3px);
+}
+
+.footer-title {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.footer-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 30px;
+    height: 2px;
+    background: var(--pink);
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li { margin-bottom: 12px; }
+.footer-links a {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--pink);
+    padding-left: 5px;
+}
+
+.footer-contact {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-contact li {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.footer-contact span.material-symbols-outlined {
+    color: var(--pink);
+    font-size: 20px;
+}
+
+.footer-bottom {
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+/* Responsive [cite: 2025-07-09] */
+@media (max-width: 992px) {
+    .footer-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 576px) {
+    .footer-grid { grid-template-columns: 1fr; }
+    .footer-bottom { flex-direction: column; gap: 15px; text-align: center; }
+}
+
+
+
+/* =========================================
+   CURRICULUM VIEW PAGE [cite: 2025-07-09]
+   ========================================= */
+.curr-view-page { padding-bottom: 80px; }
+
+.curr-header-hero {
+    background: #0f172a;
+    padding: 100px 0 60px;
+    color: #fff;
+    margin-bottom: 50px;
+}
+
+.curr-badge {
+    background: var(--pink);
+    padding: 5px 15px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.curr-header-hero h1 {
+    font-size: 42px;
+    margin: 20px 0 10px;
+    font-weight: 800;
+}
+
+.curr-header-hero .en-name {
+    font-size: 18px;
+    color: #94a3b8;
+}
+
+.curr-content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 30px;
+}
+
+.curr-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 35px;
+    margin-bottom: 30px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+}
+
+.curr-card h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+    font-size: 22px;
+}
+
+.curr-card h3 span { color: var(--pink); }
+
+.btn-download {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #f8fafc;
+    border: 2px dashed #cbd5e1;
+    padding: 20px;
+    border-radius: 15px;
+    text-decoration: none;
+    color: #475569;
+    font-weight: 700;
+    transition: 0.3s;
+}
+
+.btn-download:hover {
+    background: #fff1f2;
+    border-color: var(--pink);
+    color: var(--pink);
+}
+
+.side-card {
+    background: #f8fafc;
+    border-radius: 20px;
+    padding: 30px;
+    position: sticky;
+    top: 100px;
+}

@@ -181,38 +181,50 @@ $logoPath   = 'assets/images/logo.png';
             <span class="badge">บุคลากร</span>
             <h2 class="section-title">คณะครูผู้สอน</h2>
         </div>
+
         <div class="swiper staffSwiper">
             <div class="swiper-wrapper">
                 <?php
                 try {
+                    // ดึงข้อมูลจากตาราง teachers
                     $teacherStmt = $pdo->query("SELECT * FROM teachers ORDER BY id ASC");
                     $teachers = $teacherStmt->fetchAll();
+
                     foreach ($teachers as $teacher):
+                        // ตรวจสอบ Path รูปภาพให้ตรงกับที่ Admin อัปโหลด (uploads/teachers/) [cite: 2026-01-18]
+                        $t_img_name = $teacher['image'];
+                        $t_img_path = 'uploads/teachers/' . $t_img_name;
+                        $has_t_img = (!empty($t_img_name) && file_exists($t_img_path));
                 ?>
                     <div class="swiper-slide">
                         <div class="staff-card">
                             <div class="staff-image">
-                                <?php 
-                                $t_img = !empty($teacher['image']) ? 'assets/images/teachers/'.$teacher['image'] : ''; 
-                                if ($t_img && file_exists($t_img)):
-                                ?>
-                                    <img src="<?= $t_img ?>" alt="<?= htmlspecialchars($teacher['name']) ?>">
+                                <?php if ($has_t_img): ?>
+                                    <img src="<?= $t_img_path ?>" alt="<?= htmlspecialchars($teacher['name']) ?>">
                                 <?php else: ?>
                                     <img src="https://ui-avatars.com/api/?name=<?= urlencode($teacher['name']) ?>&background=db2777&color=fff&size=512" alt="placeholder">
                                 <?php endif; ?>
                             </div>
+
                             <div class="staff-info">
-                                <div class="staff-meta">
-                                    <span class="staff-tag">Computer Technology</span>
-                                    <h3><?= htmlspecialchars($teacher['name']) ?></h3>
-                                    <p class="staff-pos"><?= htmlspecialchars($teacher['position']) ?></p>
-                                </div>
+                                <span class="staff-tag">Computer Technology</span>
+                                <h3><?= htmlspecialchars($teacher['name']) ?></h3>
+                                <p class="staff-pos"><?= htmlspecialchars($teacher['position']) ?></p>
+                                
                                 <?php if (!empty($teacher['education'])): ?>
-                                    <p class="staff-edu"><strong>การศึกษา:</strong> <?= htmlspecialchars($teacher['education']) ?></p>
+                                    <p class="staff-edu">
+                                        <strong>การศึกษา:</strong> 
+                                        <?= htmlspecialchars($teacher['education']) ?>
+                                    </p>
                                 <?php endif; ?>
+
                                 <?php if (!empty($teacher['expertise'])): ?>
-                                    <p class="staff-exp"><strong>ความเชี่ยวชาญ:</strong> <?= htmlspecialchars($teacher['expertise']) ?></p>
+                                    <p class="staff-exp">
+                                        <strong>ความเชี่ยวชาญ:</strong> 
+                                        <?= htmlspecialchars($teacher['expertise']) ?>
+                                    </p>
                                 <?php endif; ?>
+
                                 <div class="staff-social">
                                     <span class="material-symbols-outlined">mail</span>
                                     <span class="material-symbols-outlined">call</span>
@@ -220,12 +232,146 @@ $logoPath   = 'assets/images/logo.png';
                             </div>
                         </div>
                     </div>
-                <?php endforeach; } catch (Exception $e) { echo $e->getMessage(); } ?>
+                <?php 
+                    endforeach; 
+                } catch (Exception $e) { 
+                    echo "<p class='text-white'>Error: " . $e->getMessage() . "</p>"; 
+                } 
+                ?>
             </div>
             <div class="swiper-pagination staff-pagination"></div>
         </div>
     </div>
-  </section>
+</section>
+
+<section id="awards" class="awards-section">
+    <div class="container">
+        <div class="section-head">
+            <span class="badge">เกียรติประวัติ</span>
+            <h2 class="section-title">รางวัลและความสำเร็จ</h2>
+        </div>
+
+        <div class="awards-grid">
+            <?php
+            try {
+                // ดึงข้อมูลรางวัล 8 อันล่าสุด [cite: 2026-01-18]
+                $awardStmt = $pdo->query("SELECT * FROM awards ORDER BY award_date DESC LIMIT 8");
+                $awards = $awardStmt->fetchAll();
+
+                if ($awards):
+                    foreach ($awards as $award):
+                        // ปี พ.ศ. [cite: 2025-07-09]
+                        $awardYear = date('Y', strtotime($award['award_date'])) + 543;
+                        
+                        // *** จุดสำคัญ: แก้ Path ให้ตรงกับฝั่ง Admin ของมึง [cite: 2026-01-18] ***
+                        $award_img_name = $award['image'];
+                        $award_img_path = 'assets/images/awards/' . $award_img_name;
+                        
+                        // เช็คไฟล์รูป [cite: 2026-01-18]
+                        $has_image = (!empty($award_img_name) && file_exists($award_img_path));
+            ?>
+                <div class="award-card">
+                    <div class="award-visual">
+                        <span class="award-tag-year">ปี <?= $awardYear ?></span>
+                        
+                        <?php if ($has_image): ?>
+                            <img src="<?= $award_img_path ?>" class="award-img-render" alt="<?= htmlspecialchars($award['title']) ?>">
+                        <?php else: ?>
+                            <div class="award-placeholder">
+                                <span class="material-symbols-outlined">emoji_events</span>
+                                <small>AWARDS</small>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <div class="award-body">
+                        <h4><?= htmlspecialchars($award['title']) ?></h4>
+                        <div class="award-info-meta">
+                            <span class="material-symbols-outlined">account_balance</span>
+                            <span><?= htmlspecialchars($award['organizer']) ?></span>
+                        </div>
+                    </div>
+                </div>
+            <?php 
+                    endforeach;
+                else:
+                    echo '<div class="news-empty"><h3>ยังไม่มีข้อมูลรางวัลในขณะนี้</h3></div>';
+                endif;
+            } catch (Exception $e) { echo "Error: " . $e->getMessage(); } 
+            ?>
+        </div>
+        
+        <div class="curr-footer-link">
+            <a href="awards-all.php" class="text-link-all">
+                ดูรางวัลทั้งหมด 
+                <span class="material-symbols-outlined">arrow_right_alt</span>
+            </a>
+        </div>
+    </div>
+</section>
+  
+
+<section id="projects" class="projects-section-dark">
+    <div class="pj-bg-overlay"></div>
+    
+    <div class="container">
+        <div class="section-head white">
+            <span class="badge">Showcase</span>
+            <h2 class="section-title">ผลงานนักศึกษา</h2>
+        </div>
+
+        <div class="news-slider-wrapper"> 
+            <div class="swiper projectsSwiper">
+                <div class="swiper-wrapper">
+                    <?php
+                    try {
+                        // 1. แก้ชื่อตารางเป็น projects ตามรูป DB มึง
+                        $pjStmt = $pdo->query("SELECT * FROM projects ORDER BY id DESC LIMIT 12");
+                        $projects = $pjStmt->fetchAll();
+
+                        foreach ($projects as $pj):
+                            // 2. เช็ค Path รูปภาพ [cite: 2026-01-18]
+                            $pj_img = 'uploads/projects/' . $pj['image'];
+                            $has_pj_img = (!empty($pj['image']) && file_exists($pj_img));
+                    ?>
+                        <div class="swiper-slide">
+                            <div class="pj-dark-card">
+                                <div class="pj-thumb">
+                                    <?php if ($has_pj_img): ?>
+                                        <img src="<?= $pj_img ?>" alt="<?= htmlspecialchars($pj['project_name']) ?>">
+                                    <?php else: ?>
+                                        <div class="pj-placeholder">
+                                            <span class="material-symbols-outlined">terminal</span>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="pj-tag">ปีการศึกษา <?= htmlspecialchars($pj['academic_year']) ?></div>
+                                </div>
+                                <div class="pj-body">
+                                    <h4><?= htmlspecialchars($pj['project_name']) ?></h4>
+                                    
+                                    <p class="pj-student">
+                                        <span class="material-symbols-outlined">person</span>
+                                        <?= htmlspecialchars($pj['student_names']) ?>
+                                    </p>
+                                    
+                                    <a href="project-detail.php?id=<?= $pj['id'] ?>" class="pj-btn">
+                                        รายละเอียด <span class="material-symbols-outlined">arrow_forward</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; } catch (Exception $e) { echo "<p class='text-white'>Error: " . $e->getMessage() . "</p>"; } ?>
+                </div>
+                <div class="swiper-pagination pj-pagination"></div>
+            </div>
+            <div class="swiper-button-prev-custom pj-prev"><span class="material-symbols-outlined">chevron_left</span></div>
+            <div class="swiper-button-next-custom pj-next"><span class="material-symbols-outlined">chevron_right</span></div>
+        </div>
+    </div>
+</section>
+
+
+  <?php require __DIR__ . '/includes/footer.php'; ?>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script>
@@ -254,6 +400,21 @@ $logoPath   = 'assets/images/logo.png';
         document.getElementById(tabName).classList.add("active");
         evt.currentTarget.classList.add("active");
     }
+
+    // Student Projects Slider [cite: 2025-07-09]
+const projectsSwiper = new Swiper('.projectsSwiper', {
+    slidesPerView: 1,
+    spaceBetween: 25,
+    loop: true,
+    autoplay: { delay: 4000, disableOnInteraction: false },
+    pagination: { el: ".pj-pagination", clickable: true },
+    navigation: { nextEl: ".pj-next", prevEl: ".pj-prev" },
+    breakpoints: {
+        640: { slidesPerView: 2 },
+        1024: { slidesPerView: 3 },
+        1440: { slidesPerView: 4 }
+    }
+});
   </script>
 </body>
 </html>
