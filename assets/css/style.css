@@ -1637,3 +1637,80 @@ img {
     position: sticky;
     top: 100px;
 }
+
+
+/* 🔘 ปุ่มอ่านเพิ่มเติม - แบบตัวหนังสือเพียวๆ ไร้พื้นหลัง */
+.read-more {
+    background: none !important;      /* ถอดพื้นหลังออกเกลี้ยง */
+    border: none !important;          /* ไม่เอาเส้นขอบ */
+    padding: 0 !important;           /* ไม่เอา Padding */
+    box-shadow: none !important;     /* ไม่เอาเงา */
+    color: var(--pink, #c2185b) !important; /* สีชมพู UTC */
+    font-weight: 700;                 /* เน้นตัวหนาให้ดูเป็นปุ่ม */
+    font-size: 15px;
+    font-family: 'Kanit', sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: 0.3s var(--ease);
+    text-decoration: none;
+}
+
+.read-more:hover {
+    color: var(--pink-2, #fb7185) !important; /* เปลี่ยนสีนิดนึงตอนชี้ */
+    text-decoration: underline;               /* ขีดเส้นใต้ให้รู้ว่ากดได้ */
+    transform: translateX(5px);                /* ขยับขวาหน่อยๆ ดูมีมิติ */
+}
+
+/* เพิ่มไอคอนลูกศร Material Symbols เล็กๆ (ถ้ามึงมี link symbol อยู่แล้ว) */
+.read-more::after {
+    content: '→'; 
+    font-size: 18px;
+    font-weight: 400;
+}
+
+/* 🔘 ปุ่มรายละเอียดผลงานนักศึกษา - Ultra Minimal */
+.pj-btn {
+    background: none !important;      /* ถอดพื้นหลังขาวเดิมออก */
+    border: none !important;          /* ไม่เอาเส้นขอบ */
+    padding: 0 !important;           /* ไม่เอา Padding เพื่อให้ชิดซ้ายกริบๆ */
+    box-shadow: none !important;     /* ไม่เอาเงา */
+    color: #fff !important;           /* เนื่องจากพื้นหลัง Card ผลงานมึงสีมืด เลยใช้ตัวหนังสือขาว */
+    font-weight: 600;
+    font-size: 14.5px;
+    font-family: 'Kanit', sans-serif;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.3s var(--ease);
+    text-decoration: none;
+    margin-top: 10px;                 /* เพิ่มระยะห่างจากชื่อผู้จัดทำหน่อย */
+}
+
+.pj-btn:hover {
+    color: var(--pink-2, #fb7185) !important; /* เปลี่ยนเป็นชมพูสว่างเวลาชี้ */
+    text-decoration: underline;
+    transform: translateX(8px);                /* ขยับขวาให้ดู Interactive [cite: 2025-05-30] */
+}
+
+.pj-btn .material-symbols-outlined {
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+.pj-btn:hover .material-symbols-outlined {
+    transform: scale(1.2);                     /* ขยายหัวลูกศรนิดนึงตอนชี้ */
+}
+
+
+/* 🛠️ ส่วนควบคุมการแผ่ตาราง */
+.row-hidden {
+    display: none; /* ซ่อนแถวเริ่มต้น */
+}
+
+/* เมื่อตารางถูกสั่งให้แผ่ (expanded) */
+.curr-table.expanded .row-hidden {
+    display: table-row !important;
+}
