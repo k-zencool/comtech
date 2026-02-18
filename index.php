@@ -242,6 +242,7 @@ $logoPath   = 'assets/images/logo.png';
     </div>
   </section>
 
+
   <section id="curriculum" class="curriculum-section-v2">
     <div class="container">
       <div class="section-head">
@@ -252,6 +253,7 @@ $logoPath   = 'assets/images/logo.png';
         <button class="tab-btn active" onclick="openTab(event, 'pvoc')">ระดับ ปวช.</button>
         <button class="tab-btn" onclick="openTab(event, 'hvoc')">ระดับ ปวส.</button>
       </div>
+
       <div id="pvoc" class="tab-content active">
         <div class="table-responsive">
           <table class="curr-table">
@@ -265,11 +267,14 @@ $logoPath   = 'assets/images/logo.png';
             </thead>
             <tbody>
               <?php
-              $stmt1 = $pdo->prepare("SELECT * FROM curriculum WHERE level = 'ปวช.' ORDER BY year ASC, subject_code ASC LIMIT 6");
+              // 🛠️ ถอด LIMIT ออกเพื่อให้ข้อมูลมาครบ
+              $stmt1 = $pdo->prepare("SELECT * FROM curriculum WHERE level = 'ปวช.' ORDER BY year ASC, subject_code ASC");
               $stmt1->execute();
-              while ($row = $stmt1->fetch()):
+              $c1 = 0;
+              while ($row = $stmt1->fetch()): $c1++;
+                $hide = ($c1 > 6) ? 'curr-row-hidden' : ''; // 🛠️ ซ่อนแถวที่ 7 เป็นต้นไป
               ?>
-                <tr>
+                <tr class="<?= $hide ?>">
                   <td class="code-col"><?= $row['subject_code'] ?></td>
                   <td class="name-col"><?= $row['subject_name'] ?></td>
                   <td><?= $row['credits'] ?></td>
@@ -280,6 +285,7 @@ $logoPath   = 'assets/images/logo.png';
           </table>
         </div>
       </div>
+
       <div id="hvoc" class="tab-content">
         <div class="table-responsive">
           <table class="curr-table">
@@ -293,11 +299,14 @@ $logoPath   = 'assets/images/logo.png';
             </thead>
             <tbody>
               <?php
-              $stmt2 = $pdo->prepare("SELECT * FROM curriculum WHERE level = 'ปวส.' ORDER BY year ASC, subject_code ASC LIMIT 6");
+              // 🛠️ ถอด LIMIT ออกเช่นกัน
+              $stmt2 = $pdo->prepare("SELECT * FROM curriculum WHERE level = 'ปวส.' ORDER BY year ASC, subject_code ASC");
               $stmt2->execute();
-              while ($row = $stmt2->fetch()):
+              $c2 = 0;
+              while ($row = $stmt2->fetch()): $c2++;
+                $hide = ($c2 > 6) ? 'curr-row-hidden' : '';
               ?>
-                <tr>
+                <tr class="<?= $hide ?>">
                   <td class="code-col"><?= $row['subject_code'] ?></td>
                   <td class="name-col"><?= $row['subject_name'] ?></td>
                   <td><?= $row['credits'] ?></td>
@@ -308,8 +317,11 @@ $logoPath   = 'assets/images/logo.png';
           </table>
         </div>
       </div>
+
       <div class="curr-footer-link">
-        <a href="curriculum-view.php" class="text-link-all">ดูโครงสร้างหลักสูตรทั้งหมด <span class="material-symbols-outlined">arrow_right_alt</span></a>
+        <button type="button" class="read-more border-0 bg-transparent" id="btn-show-curr" onclick="toggleCurriculum()">
+          ดูโครงสร้างหลักสูตรทั้งหมด <span class="material-symbols-outlined">expand_more</span>
+        </button>
       </div>
     </div>
   </section>
@@ -387,7 +399,11 @@ $logoPath   = 'assets/images/logo.png';
         } catch (Exception $e) {
         } ?>
       </div>
-      <div class="curr-footer-link"><a href="awards-all.php" class="text-link-all">ดูรางวัลทั้งหมด <span class="material-symbols-outlined">arrow_right_alt</span></a></div>
+      <div class="curr-footer-link">
+        <button type="button" class="read-more border-0 bg-transparent" id="btn-show-curr" onclick="toggleCurriculum()">
+          ดูโครงสร้างหลักสูตรทั้งหมด <span class="material-symbols-outlined">expand_more</span>
+        </button>
+      </div>
     </div>
   </section>
 
@@ -470,96 +486,9 @@ $logoPath   = 'assets/images/logo.png';
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script>
-    // 🚀 Modal Logic
-    function openDetailModal(title, img, content, tag) {
-      document.getElementById('mTitle').innerText = title;
-      document.getElementById('mImg').src = img;
-      document.getElementById('mContent').innerHTML = content.replace(/\n/g, '<br>');
-      document.getElementById('mTag').innerText = tag;
-      document.getElementById('detailModal').style.display = 'flex';
-      document.body.classList.add('modal-open');
-    }
 
-    function closeModal(e) {
-      if (e == null || e.target.id === 'detailModal') {
-        document.getElementById('detailModal').style.display = 'none';
-        document.body.classList.remove('modal-open');
-      }
-    }
+  <script src="assets/js/modal-handler.js"></script>
 
-    // 🚀 Slider Initializations [cite: 2025-07-09]
-    new Swiper('.newsSwiper', {
-      slidesPerView: 1,
-      spaceBetween: 25,
-      navigation: {
-        nextEl: ".swiper-button-next-custom",
-        prevEl: ".swiper-button-prev-custom"
-      },
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true
-      },
-      breakpoints: {
-        640: {
-          slidesPerView: 2
-        },
-        1024: {
-          slidesPerView: 3
-        },
-        1280: {
-          slidesPerView: 4
-        }
-      }
-    });
-    new Swiper('.staffSwiper', {
-      slidesPerView: 1,
-      spaceBetween: 30,
-      loop: true,
-      autoplay: {
-        delay: 5000
-      },
-      pagination: {
-        el: ".staff-pagination",
-        clickable: true
-      },
-      effect: 'fade'
-    });
-    new Swiper('.projectsSwiper', {
-      slidesPerView: 1,
-      spaceBetween: 25,
-      loop: true,
-      pagination: {
-        el: ".pj-pagination",
-        clickable: true
-      },
-      navigation: {
-        nextEl: ".pj-next",
-        prevEl: ".pj-prev"
-      },
-      breakpoints: {
-        640: {
-          slidesPerView: 2
-        },
-        1024: {
-          slidesPerView: 3
-        },
-        1440: {
-          slidesPerView: 4
-        }
-      }
-    });
-
-    function openTab(evt, tabName) {
-      let i, content, links;
-      content = document.getElementsByClassName("tab-content");
-      for (i = 0; i < content.length; i++) content[i].classList.remove("active");
-      links = document.getElementsByClassName("tab-btn");
-      for (i = 0; i < links.length; i++) links[i].classList.remove("active");
-      document.getElementById(tabName).classList.add("active");
-      evt.currentTarget.classList.add("active");
-    }
-  </script>
 </body>
 
 </html>

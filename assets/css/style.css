@@ -1054,11 +1054,11 @@ img {
 }
 
 /* =========================================
-   STAFF SECTION - COMPACT & MODERN STYLE [cite: 2025-07-09]
+   STAFF SECTION - FIXED COMPACT STYLE [cite: 2025-07-09, 2026]
    ========================================= */
 
 .staff-section {
-    padding: 30px 0; /* ย่อความสูง section ให้เล็กลงมาก [cite: 2025-07-09] */
+    padding: 30px 0; /* ย่อความสูง section ให้เล็กลงมากตามสั่ง [cite: 2025-07-09] */
     position: relative;
     background-color: #0f172a; 
     background-image: url('../images/tech-pattern.jpg') !important; 
@@ -1085,21 +1085,22 @@ img {
     padding: 20px 0 50px !important; /* ลดระยะห่างบนล่าง [cite: 2025-07-09] */
 }
 
-/* Staff Card - แยกส่วนรูปและเนื้อหา [cite: 2025-07-09] */
+/* 🖼️ ป้องกันการทับซ้อนด้วย Flexbox Layout */
 .staff-card {
     display: flex;
     background: transparent; /* เอากรอบและพื้นหลังการ์ดออก [cite: 2025-05-31] */
     border: none;
     max-width: 900px;
     margin: 0 auto;
-    gap: 50px; /* เพิ่มระยะห่างของรูปกับเนื้อหาตามสั่ง [cite: 2025-07-09] */
+    gap: 50px; /* ระยะห่างของรูปกับเนื้อหา 50px กริบๆ [cite: 2025-07-09] */
     align-items: center; /* จัดให้อยู่กลางแนวตั้ง [cite: 2025-07-09] */
     transition: 0.4s var(--ease);
+    width: 100%;
 }
 
-/* ขยายรูปให้เต็ม section มากขึ้น [cite: 2025-07-09] */
+/* ❌ ห้ามบีบรูป: ล็อคขนาดภาพให้คงที่ด้วย Flex-basis */
 .staff-image {
-    width: 42%;
+    flex: 0 0 38%; /* 🛠️ ล็อคขนาดรูปไว้ที่ 38% ห้ามหดห้ามขยาย */
     height: 340px; /* กำหนดความสูงรูปภาพให้พอดีกับความเตี้ยของ section [cite: 2025-07-09] */
     background: #1e293b;
     border-radius: 24px;
@@ -1107,6 +1108,7 @@ img {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); /* เพิ่มมิติให้รูป [cite: 2025-07-09] */
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 .staff-image img {
     width: 100%;
     height: 100%;
@@ -1115,9 +1117,9 @@ img {
     transition: 0.6s ease;
 }
 
-/* เนื้อหาข้อความแบบไม่มีกรอบ [cite: 2025-05-31] */
+/* ❌ ห้ามทับซ้อน: ให้ข้อความคำนวณพื้นที่ที่เหลือเอง */
 .staff-info {
-    width: 58%;
+    flex: 1; /* 🛠️ ระบบจะคำนวณพื้นที่ที่เหลือให้เองโดยไม่ไปเบียดรูป */
     padding: 10px 0; /* เอา padding ออกเพื่อให้ดูโล่ง [cite: 2025-05-31] */
     display: flex;
     flex-direction: column;
@@ -1125,12 +1127,13 @@ img {
     background: transparent; /* เอากรอบข้อความออกตามสั่ง [cite: 2025-05-31] */
     border: none;
     box-shadow: none;
+    text-align: left;
 }
 
 .staff-card:hover .staff-image img { transform: scale(1.05); }
 
-.staff-tag { color: var(--pink-2); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; }
-.staff-info h3 { color: #ffffff; font-size: 32px; margin-bottom: 0; font-weight: 700; }
+.staff-tag { color: var(--pink-2); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; display: block; }
+.staff-info h3 { color: #ffffff; font-size: 32px; margin: 0 0 5px; font-weight: 700; line-height: 1.2; }
 .staff-pos { color: var(--pink-2); font-weight: 500; font-size: 16px; margin-bottom: 15px; opacity: 0.9; }
 
 /* ข้อความรายละเอียดเน้นอ่านง่ายบนพื้นหลังมืด [cite: 2025-05-31] */
@@ -1141,17 +1144,21 @@ img {
 .staff-social span { font-size: 20px; cursor: pointer; transition: 0.3s; opacity: 0.6; }
 .staff-social span:hover { color: var(--pink-2); opacity: 1; transform: translateY(-2px); }
 
-/* Staff Pagination */
+/* Staff Pagination [cite: 2026-02-19] */
 .staff-pagination { bottom: 10px !important; }
 .staff-pagination .swiper-pagination-bullet { background: rgba(255, 255, 255, 0.3) !important; width: 8px; height: 8px; }
 .staff-pagination .swiper-pagination-bullet-active { background: var(--pink) !important; width: 25px; border-radius: 4px; }
 
-/* ปรับแต่งสำหรับมือถือ [cite: 2025-07-09] */
+/* 📱 ปรับแต่งสำหรับมือถือ (สลับเป็นแนวตั้งอัตโนมัติ) */
 @media (max-width: 850px) {
     .staff-section { padding: 40px 0; }
-    .staff-card { flex-direction: column; gap: 20px; text-align: center; }
-    .staff-image { width: 90%; height: 300px; }
-    .staff-info { width: 100%; align-items: center; }
+    .staff-card { 
+        flex-direction: column; 
+        gap: 25px; 
+        text-align: center; 
+    }
+    .staff-image { flex: 0 0 auto; width: 100%; height: 300px; }
+    .staff-info { flex: 0 0 auto; width: 100%; align-items: center; text-align: center; }
     .staff-social { justify-content: center; }
 }
 
@@ -1704,4 +1711,9 @@ img {
     transform: scale(1.2);                     /* ขยายหัวลูกศรนิดนึงตอนชี้ */
 }
 
+
+/* 🛠️ ซ่อนแถวเริ่มต้นเพื่อให้หน้าเว็บคลีน */
+.curr-row-hidden {
+    display: none;
+}
 
